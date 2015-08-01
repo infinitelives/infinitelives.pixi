@@ -21,7 +21,7 @@
    :builds {:test
             {:source-paths ["src" "test"]
              :compiler {:output-to "resources/test/compiled.js"
-                        :optimizations :whitespace
+                        :optimizations :advanced
                         :pretty-print true
 
                         ;; pixi uses techniques incompatible with
