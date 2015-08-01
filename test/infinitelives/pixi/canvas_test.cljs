@@ -3,5 +3,5 @@
             [infinitelives.pixi.canvas :as canvas]))
 
 (deftest make
-  (let [c (canvas/make)]
-    (is c)))
+  (let [c (canvas/make :engine :canvas
+                       :canvas (.getElementById js/document "app"))]))

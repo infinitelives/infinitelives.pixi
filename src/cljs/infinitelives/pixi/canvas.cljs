@@ -1,7 +1,8 @@
 (ns
     ^{:doc "Functions for building and manipulating the canvas DOM element"}
   infinitelives.pixi.canvas
-  (:require [dommy.core :as dommy :refer-macros [sel1]]))
+  (:require [dommy.core :as dommy :refer-macros [sel1]]
+            [PIXI]))
 
 (defn make
   "make a new pixi canvas, or initialise pixi with an existing canvas.
@@ -46,9 +47,9 @@
 
         ;; make the renderer
         rend (case engine
-               :webgl (js/PIXI.WebGLRenderer. wid hig opts)
-               :canvas (js/PIXI.CanvasRenderer. wid hig opts)
-               (js/PIXI.autoDetectRenderer. wid hig opts))
+               :webgl (js/PIXI.WebGLRenderer. wid hig canvas opts)
+               :canvas (js/PIXI.CanvasRenderer. wid hig canvas opts)
+               (js/PIXI.autoDetectRenderer. wid hig canvas opts))
 
         ;; details of the generated renderer
         actual-canvas (.-view rend)
