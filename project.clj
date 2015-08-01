@@ -22,7 +22,7 @@
             {:source-paths ["src" "test"]
              :compiler {:output-to "resources/test/compiled.js"
                         :optimizations :advanced
-                        :pretty-print true
+                        :pretty-print false
 
                         ;; pixi uses techniques incompatible with
                         ;; google closure optimisation, so we preserve
