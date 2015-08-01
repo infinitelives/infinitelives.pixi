@@ -47,9 +47,9 @@
 
         ;; make the renderer
         rend (case engine
-               :webgl (js/PIXI.WebGLRenderer. wid hig canvas opts)
-               :canvas (js/PIXI.CanvasRenderer. wid hig canvas opts)
-               (js/PIXI.autoDetectRenderer. wid hig canvas opts))
+               :webgl (PIXI/WebGLRenderer. wid hig canvas opts)
+               :canvas (PIXI/CanvasRenderer. wid hig canvas opts)
+               (PIXI/autoDetectRenderer. wid hig canvas opts))
 
         ;; details of the generated renderer
         actual-canvas (.-view rend)
