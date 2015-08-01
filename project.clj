@@ -29,7 +29,7 @@
                         ;; its namespace
                         :externs ["src/js/pixi-externs.js"]
                         :foreign-libs
-                        [{:file "src/js/pixi.js"
+                        [{:file "https://raw.githubusercontent.com/pixijs/pixi.js/v2.2.9/bin/pixi.js"
                           :provides ["PIXI"]}]
                         }}}
    :test-commands {"test" ["phantomjs"
