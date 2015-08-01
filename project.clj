@@ -22,7 +22,16 @@
             {:source-paths ["src" "test"]
              :compiler {:output-to "resources/test/compiled.js"
                         :optimizations :whitespace
-                        :pretty-print true}}}
+                        :pretty-print true
+
+                        ;; pixi uses techniques incompatible with
+                        ;; google closure optimisation, so we preserve
+                        ;; its namespace
+                        :externs ["src/js/pixi-externs.js"]
+                        :foreign-libs
+                        [{:file "src/js/pixi.js"
+                          :provides ["PIXI"]}]
+                        }}}
    :test-commands {"test" ["phantomjs"
                            "resources/test/test.js"
                            "resources/test/test.html"]}})
