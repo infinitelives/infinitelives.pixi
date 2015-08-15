@@ -49,6 +49,21 @@
     (request-animation-frame #(close! c))
     c))
 
+(defn wait-frames
+  "returns a channel which closes when a certain number
+  of frames have passed. eg
+
+  ```
+  ;; wait 10 frames
+  (<! (wait-frames 10))
+  ```"
+  [frames]
+  (go
+    (loop [i frames]
+      (when (pos? i)
+        (<! (next-frame))
+        (recur (dec i))))))
+
 
 ;;
 ;; Resize Channel
