@@ -36,6 +36,19 @@
     :doc "schedules the passed in callback to be fired once, next animation frame."}
   request-animation-frame (make-request-animation-frame))
 
+(defn next-frame
+  "returns a single use channel which closes on next frame callback.
+  pulling from it waits exactly one frame. eg
+
+  ```
+  ;; wait one frame
+  (<! (next-frame))
+  ```"
+  []
+  (let [c (chan)]
+    (request-animation-frame #(close! c))
+    c))
+
 
 ;;
 ;; Resize Channel
