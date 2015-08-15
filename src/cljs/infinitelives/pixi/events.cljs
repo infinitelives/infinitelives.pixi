@@ -2,6 +2,34 @@
   (:require [cljs.core.async :refer [put! chan close!]])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
+;;
+;; Animation handler
+;;
+(def fallback-fps 60)
+
+(defn make-request-animation-frame
+  "compose a function that is the r-a-f func. returns a function. This returned function takes a callback and ensures
+  its called next frame"
+  []
+  (cond
+   (.-requestAnimationFrame js/window)
+   #(.requestAnimationFrame js/window %)
+
+   (.-webkitRequestAnimationFrame js/window)
+   #(.webkitRequestAnimationFrame js/window %)
+
+   (.-mozRequestAnimationFrame js/window)
+   #(.mozRequestAnimationFrame js/window %)
+
+   (.-oRequestAnimationFrame js/window)
+   #(.oRequestAnimationFrame js/window %)
+
+   (.-msRequestAnimationFrame js/window)
+   #(.msRequestAnimationFrame js/window %)
+
+   :else
+   #(.setTimeout js/window % (/ 1000 fallback-fps))))
+
 
 ;;
 ;; Resize Channel
