@@ -30,6 +30,12 @@
    :else
    #(.setTimeout js/window % (/ 1000 fallback-fps))))
 
+;; build the actual function
+(def
+  ^{:arglist '([callback])
+    :doc "schedules the passed in callback to be fired once, next animation frame."}
+  request-animation-frame (make-request-animation-frame))
+
 
 ;;
 ;; Resize Channel
