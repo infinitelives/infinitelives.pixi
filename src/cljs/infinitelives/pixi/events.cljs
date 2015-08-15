@@ -1,4 +1,7 @@
-(ns infinitelives.pixi.events)
+(ns infinitelives.pixi.events
+  (:require [cljs.core.async :refer [put! chan close!]])
+  (:require-macros [cljs.core.async.macros :refer [go]]))
+
 
 ;;
 ;; Resize Channel
