@@ -64,6 +64,19 @@
         (<! (next-frame))
         (recur (dec i))))))
 
+(defn wait-time
+  "returns a channel which closes when a certain amount of
+  time in milliseconds has passed, but determines that time by counting
+  the requestAnimationFrame callbacks, so that when tab focus is lost,
+  the callback, and thus this wait is suspended.
+
+  ```
+  ;; wait one seconds worth of frames
+  (<! (wait-time 1000))
+  ```"
+  [delay]
+  (wait-frames (* 60 (/ delay 1000))))
+
 
 ;;
 ;; Resize Channel
