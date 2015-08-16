@@ -53,7 +53,7 @@
   :y             y position for the new canvas
   :width         width of new canvas
   :height        height of new canvas"
-  [& {:keys [expand x y width height canvas engine]
+  [{:keys [expand x y width height canvas engine]
       :or {expand false
            x 0
            y 0
@@ -112,7 +112,7 @@
 
 (defn make-stage
   "Layout the stage structure"
-  [& {:keys [background layers]
+  [{:keys [background layers]
       :or {background 0x000000
            layers [:backdrop :below :world :above :ui :effect]}}]
 
@@ -160,10 +160,10 @@
   :width         width of new canvas
   :height        height of new canvas
   "
-  [& opts]
-  (let [{:keys [stage renderer canvas layer]
-         :as world} (into (apply make-pixi-canvas opts)
-                          (apply make-stage opts ))]
+  [opts]
+  (let [{:keys [stage renderer canvas layer] :as world}
+        (into (make opts)
+              (make-stage opts))]
     ;; add the stages to the canvas
     (doall
      (map
