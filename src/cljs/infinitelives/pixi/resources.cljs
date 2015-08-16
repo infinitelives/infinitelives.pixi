@@ -1,4 +1,11 @@
-(ns infinitielives.pixi.resources)
+(ns infinitelives.pixi.resources
+  (:require [PIXI]
+            [infinitelives.pixi.sprite :as sprite]
+            [infinitelives.utils.string :as string]
+            [infinitelives.utils.events :as events]
+            [infinitelives.utils.console :refer [log]]
+            [cljs.core.async :refer [chan put! <! timeout close!]])
+  (:require-macros [cljs.core.async.macros :refer [go]]))
 
 ;; where we store all the loaded textures keyed by name
 (defonce !textures (atom {}))
