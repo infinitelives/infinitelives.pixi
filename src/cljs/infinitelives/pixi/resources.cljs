@@ -169,7 +169,7 @@ fullsize."
     (go
       ;; fade in
       (log "fade in")
-      (<! (sprite/fadein b :duration fade-in))
+      (<! (fadein b :duration fade-in))
       (log "done")
 
       ;; show load progress
@@ -182,7 +182,7 @@ fullsize."
       (<! (timeout 300))
 
       ;; fadeout
-      (<! (sprite/fadeout b :duration fade-out))
+      (<! (fadeout b :duration fade-out))
 
       ;; remove progress bar sprite
       (.removeChild s b)
