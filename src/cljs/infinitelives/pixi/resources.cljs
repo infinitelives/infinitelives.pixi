@@ -168,9 +168,7 @@ fullsize."
         b (add-prog-bar s options)]
     (go
       ;; fade in
-      (log "fade in")
       (<! (fadein b :duration fade-in))
-      (log "done")
 
       ;; show load progress
       (<! (apply (partial load-urls urls b) options))
