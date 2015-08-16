@@ -178,24 +178,24 @@
     (.render renderer stage)
 
     (let [
-          render (fn [] (.render renderer stage))
-          resize (fn [width height]
-                   (.resize renderer width height)
-                   (doall (map (partial center-container! canvas)
-                               (map second layer))))
-          expand (fn [] (resize (.-innerWidth js/window)
-                                (.-innerHeight js/window)))
+          render-fn (fn [] (.render renderer stage))
+          resize-fn (fn [width height]
+                      (.resize renderer width height)
+                      (doall (map (partial center-container! canvas)
+                                  (map second layer))))
+          expand-fn (fn [] (resize-fn (.-innerWidth js/window)
+                                      (.-innerHeight js/window)))
 
           resizer-loop
           (when (:expand opts) (let [c (events/new-resize-chan)]
-                                 (go (while true
-                                       (let [[width height] (<! c)]
-                                         (resize width height)
-                                         (render))))))]
+                           (go (while true
+                                 (let [[width height] (<! c)]
+                                   (resize-fn width height)
+                                   (render-fn))))))]
 
       (into
        world
        {
-        :render-fn render
-        :resize-fn resize
-        :expand-fn expand}))))
+        :render-fn render-fn
+        :resize-fn resize-fn
+        :expand-fn expand-fn}))))
