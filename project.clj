@@ -7,6 +7,9 @@
                  [org.clojure/clojurescript "0.0-3308"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
 
+                 ;; depend on utils
+                 [infinitelives.utils/infinitelives.utils "0.1.0-SNAPSHOT"]
+
                  ;; should we depend on this? maybe its better without?
                  [prismatic/dommy "1.1.0"]
                  ]
