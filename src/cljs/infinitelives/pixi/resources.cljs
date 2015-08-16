@@ -78,6 +78,15 @@
   (scale (key @!textures)))
 
 
+(defn url-keyword [url]
+  (-> url
+      (.split "/")
+      last
+      (.split ".")
+      first
+      keyword))
+
+
 ;; setup a pixi texture keyed by the tail of its filename
 (defn- register-texture
   [url img]
