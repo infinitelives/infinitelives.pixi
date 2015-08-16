@@ -90,20 +90,20 @@
 ;; setup a pixi texture keyed by the tail of its filename
 (defn- register-texture
   [url img]
-  (when (ends-with? url ".png")
-    (swap! =textures=
+  (when (string/ends-with? url ".png")
+    (swap! !textures
            assoc (url-keyword url)
            {
             :linear
             (PIXI/Texture.fromImage
-             url true (aget js/PIXI.scaleModes "LINEAR"))
+             url true (aget PIXI/scaleModes "LINEAR"))
 
             ;; this is a hack adding # to the tail of a url so pixi doesnt use the other
             ;; linear version
             ;; SEE: https://github.com/GoodBoyDigital/pixi.js/issues/1724
             :nearest
             (PIXI/Texture.fromImage
-             (str url "#") true (aget js/PIXI.scaleModes "NEAREST"))})))
+             (str url "#") true (aget PIXI/scaleModes "NEAREST"))})))
 
 (defn load-urls
   "loads each url in the passed in list as an image. Updates the progress
