@@ -1,39 +1,14 @@
 (ns
     ^{:doc "Functions for building and manipulating the canvas DOM element"}
   infinitelives.pixi.canvas
-  (:require [goog.dom :as dom]
-            [cljs.core.async :refer [<!]]
-
-            [infinitelives.pixi.events :as events]
-
+  (:require [cljs.core.async :refer [<!]]
+            [infinitelives.utils.events :as events]
+            [infinitelives.utils.dom :as dom]
             [PIXI])
 
   (:require-macros [cljs.core.async.macros :refer [go]])
 )
 
-(defn as-str
-  "Coerces strings and keywords to strings, while preserving namespace of
-   namespaced keywords"
-  [s]
-  (if (keyword? s)
-    (str (some-> (namespace s) (str "/")) (name s))
-    s))
-
-(defn set-style!
-  "Set the style of `elem` using key-value pairs:
-      (set-style! elem :display \"block\" :color \"red\")"
-  [elem & kvs]
-  (assert (even? (count kvs)))
-  (let [style (.-style elem)]
-    (doseq [[k v] (partition 2 kvs)]
-      (.setProperty style (as-str k) v))
-    elem))
-
-(defn append!
-  "Append `child` to `parent`"
-  ([parent child]
-     (doto parent
-       (.appendChild child))))
 
 (defn make
   "make a new pixi canvas, or initialise pixi with an existing canvas.
@@ -91,11 +66,11 @@
       ;; custom canvas was generated. we should position it
       ;; and add it to the DOM
       (do
-        (set-style! actual-canvas
+        (dom/set-style! actual-canvas
                           :left (if expand 0 x)
                           :top (if expand 0 y)
                           :position "absolute")
-        (append! (.-body js/document) actual-canvas)))
+        (dom/append! (.-body js/document) actual-canvas)))
 
     (let [wind-width (if expand fswidth canvas-width)
           wind-height (if expand fsheight canvas-height)
