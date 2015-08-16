@@ -91,11 +91,11 @@
       ;; custom canvas was generated. we should position it
       ;; and add it to the DOM
       (do
-        (dommy/set-style! actual-canvas
+        (set-style! actual-canvas
                           :left (if expand 0 x)
                           :top (if expand 0 y)
                           :position "absolute")
-        (dommy/append! (sel1 :body) actual-canvas)))
+        (append! (.-body js/document) actual-canvas)))
 
     (let [wind-width (if expand fswidth canvas-width)
           wind-height (if expand fsheight canvas-height)
