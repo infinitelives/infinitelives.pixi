@@ -4,6 +4,7 @@
   (:require [cljs.core.async :refer [<!]]
             [infinitelives.utils.events :as events]
             [infinitelives.utils.dom :as dom]
+            [infinitelives.utils.console :refer [log]]
             [PIXI])
 
   (:require-macros [cljs.core.async.macros :refer [go]])
