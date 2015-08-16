@@ -1,8 +1,15 @@
 (ns
     ^{:doc "Functions for building and manipulating the canvas DOM element"}
   infinitelives.pixi.canvas
-  (:require [dommy.core :as dommy :refer-macros [sel1]]
-            [PIXI]))
+  (:require [goog.dom :as dom]
+            [cljs.core.async :refer [<!]]
+
+            [infinitelives.pixi.events :as events]
+
+            [PIXI])
+
+  (:require-macros [cljs.core.async.macros :refer [go]])
+)
 
 (defn make
   "make a new pixi canvas, or initialise pixi with an existing canvas.
