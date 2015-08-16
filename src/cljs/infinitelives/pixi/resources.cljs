@@ -140,6 +140,26 @@ fullsize."
             (when (< i num-urls)
               (recur (inc i)))))))))
 
+(defn fadeout [spr & {:keys [duration start end]
+                        :or {duration 1 start nil end 0}}]
+  (let [start (if (nil? start) (.-alpha spr) start)
+        ticks (* 60 duration)]
+    (go
+      (loop [i ticks]
+        (<! (events/next-frame))
+        (set! (.-alpha spr) (+ end (* (- start end) (/ i ticks))))
+        (when (pos? i) (recur (dec i)))))))
+
+
+(defn fadein [spr & {:keys [duration start end]
+                      :or {duration 1 start 0 end 1}}]
+  (let [ticks (* 60 duration)]
+    (go
+      (loop [i ticks]
+        (<! (events/next-frame))
+        (set! (.-alpha spr) (+ start (* (- end start) (/ (- ticks i) ticks))))
+        (when (pos? i) (recur (dec i)))))))
+
 (defn load-resources [s urls & {:keys [fade-in fade-out]
                       :or {fade-in 0.5 fade-out 0.5}
                       :as options}]
