@@ -29,8 +29,11 @@
   ([sprite x y]
    (set! (.-position.x sprite) x)
    (set! (.-position.y sprite) y))
-  ([sprite [x y]]
-   (set-pos! sprite x y)))
+  ([sprite pos]
+   (if (vector? pos)
+     (set-pos! sprite (pos 0) (pos 1))
+     (set-pos! sprite (aget pos 0) (aget pos 1))
+     )))
 
 (defn set-anchor! [sprite x y]
   (set! (.-anchor sprite) (make-point x y)))
