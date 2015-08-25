@@ -38,6 +38,9 @@
 (defn set-anchor! [sprite x y]
   (set! (.-anchor sprite) (make-point x y)))
 
+(defn set-alpha! [sprite alpha]
+  (set! (.-alpha sprite) alpha))
+
 (defn set-pivot! [sprite x y]
   (set! (.-pivot.x sprite) x)
   (set! (.-pivot.y sprite) y))
