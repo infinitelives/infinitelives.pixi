@@ -49,3 +49,6 @@
                   (set! (.-scale sprite) (make-point s s)))
   ([sprite sx sy]
    (set! (.-scale sprite) (make-point sx sy))))
+
+(defn set-texture! [sprite tex]
+  (.setTexture sprite tex))
