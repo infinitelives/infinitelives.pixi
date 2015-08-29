@@ -168,11 +168,6 @@
      el
      js/document.body)))
 
-;(install-force-loading-font-div! "Abel")
-
-(install-google-webfont-script!)
-(install-google-font-stylesheet! "http://fonts.googleapis.com/css?family=Open+Sans:400")
-
 (defn render-row [metrics texture row y]
   (for [[i c] (partition 2 (interleave (range) row))]
     (let [tex (render-texture-char!
@@ -257,6 +252,7 @@
      :font font
     }))
 
+
 (defn font-text-width [font text]
   (text-width (:metrics font) text))
 
@@ -284,3 +280,7 @@
         (if (not (empty? r))
           (recur r (+ xp w))
           [(+ xp w x) y])))))
+
+
+;; install the installer??
+(install-google-webfont-script!)
