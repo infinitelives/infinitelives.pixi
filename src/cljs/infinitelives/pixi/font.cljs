@@ -4,9 +4,7 @@
             [infinitelives.utils.dom :as dom]
             [infinitelives.pixi.sprite :as sprite]
             [infinitelives.pixi.texture :as texture]
-            [PIXI])
-
-)
+            [PIXI]))
 
 (def printable-characters
   " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?@#$%^&*()-=_+[]{};':\",.<>/`~\\|")
@@ -154,6 +152,13 @@
          (dom/set-attr! :type "text/css")
          (dom/set-attr! :href url))
      (aget (.getElementsByTagName js/document "link") 0))))
+
+(defn install-google-font-dom-anchor! [url]
+  (let [elem (dom/create-element :p)]
+    (dom/append! js/document.body
+                 (-> elem
+                     (dom/set-attr! :style "font-family: '...'")
+                     (dom/set-text! "&nbsp;")))))
 
 (defn install-force-loading-font-div! [fontname]
   (let [el (dom/create-element :div)]
