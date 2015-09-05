@@ -153,12 +153,16 @@
          (dom/set-attr! :href url))
      (aget (.getElementsByTagName js/document "link") 0))))
 
-(defn install-google-font-dom-anchor! [url]
+(defn install-google-font-dom-anchor! [font-family]
   (let [elem (dom/create-element :p)]
     (dom/append! js/document.body
                  (-> elem
-                     (dom/set-attr! :style "font-family: '...'")
-                     (dom/set-text! "&nbsp;")))))
+                     (dom/set-style! :font-family font-family
+                                     :position "absolute"
+                                     :left "-250px"
+                                     :top "0px")
+                     (dom/set-html! "&nbsp;")))
+    elem))
 
 (defn install-force-loading-font-div! [fontname]
   (let [el (dom/create-element :div)]
