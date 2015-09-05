@@ -1,5 +1,6 @@
 (ns infinitelives.pixi.font
   (:require [cljs.core.async :refer [put! chan <! >! alts! timeout close!]]
+            [clojure.string :as string]
             [infinitelives.utils.console :refer [log]]
             [infinitelives.utils.dom :as dom]
             [infinitelives.pixi.sprite :as sprite]
@@ -289,6 +290,18 @@
         (if (not (empty? r))
           (recur r (+ xp w))
           [(+ xp w x) y])))))
+
+(defn- make-google-font-uri [font-family]
+  (str "http://fonts.googleapis.com/css?family="
+       (string/replace font-family #" " "+")))
+
+(defn google
+  "Load in one or more specified google font by name"
+  [[font & rest]]
+  (when font
+    (install-google-font-stylesheet! (make-google-font-uri font))
+    (install-google-font-dom-anchor! font)
+    (recur rest)))
 
 
 ;; install the installer??
