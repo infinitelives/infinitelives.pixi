@@ -63,3 +63,13 @@
   [sprite & [offest-x offset-y]]
   (vec2/vec2 (+ (or offset-x 0) (.-position.x sprite))
              (+ (or offset-y 0) (.-position.y sprite))))
+
+(defn get-x [sprite]
+  (.-position.x sprite))
+
+(defn get-y [sprite]
+  (.-position.y sprite))
+
+(defn get-xy [sprite]
+  [(.-position.x sprite)
+   (.-position.y sprite)])
