@@ -52,3 +52,13 @@
 
 (defn set-texture! [sprite tex]
   (.setTexture sprite tex))
+
+
+(defn get-pos
+  "return the position of sprite as a vec2.
+  optionally pass in an x and y offset to add
+  to the returned vector
+  "
+  [sprite & [offest-x offset-y]]
+  (vec2/vec2 (+ (or offset-x 0) (.-position.x sprite))
+             (+ (or offset-y 0) (.-position.y sprite))))
