@@ -1,6 +1,6 @@
 (ns infinitelives.pixi.sprite
   (:require [PIXI]
-            [infinitelives.pixi.vec2 :as vec2]
+            [infinitelives.utils.vec2 :as vec2]
             )
 )
 
