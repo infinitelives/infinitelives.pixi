@@ -60,7 +60,7 @@
   optionally pass in an x and y offset to add
   to the returned vector
   "
-  [sprite & [offest-x offset-y]]
+  [sprite & [offset-x offset-y]]
   (vec2/vec2 (+ (or offset-x 0) (.-position.x sprite))
              (+ (or offset-y 0) (.-position.y sprite))))
 
