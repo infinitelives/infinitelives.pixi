@@ -14,14 +14,17 @@
   [texture & {:keys [x y xhandle yhandle scale alpha]
               :or {x 0 y 0
                    xhandle 0.5 yhandle 0.5
-                   scale [1 1]
+                   scale 1
                    alpha 1}}]
   (let [s (PIXI/Sprite. texture)]
     (set! (.-anchor s) (make-point xhandle yhandle))
     (set! (.-x s) x)
     (set! (.-y s) y)
-    (when-not (= scale [1 1])
-      (set! (.-scale s) (make-point (get scale 0) (get scale 1))))
+    (when-not (= scale 1)
+      (set! (.-scale s)
+            (if (number? scale)
+              (make-point scale scale)
+              (make-point (get scale 0) (get scale 1)))))
     (when-not (= 1 alpha)
       (set! (.-alpha s) alpha))
     s))
