@@ -77,22 +77,12 @@
 (defn get-texture [key scale]
   (scale (key @!textures)))
 
-
-(defn url-keyword [url]
-  (-> url
-      (.split "/")
-      last
-      (.split ".")
-      first
-      keyword))
-
-
 ;; setup a pixi texture keyed by the tail of its filename
 (defn- register-texture
   [url img]
   (when (string/ends-with? url ".png")
     (swap! !textures
-           assoc (url-keyword url)
+           assoc (string/url-keyword url)
            {
             :linear
             (PIXI/Texture.fromImage
