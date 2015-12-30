@@ -108,7 +108,7 @@ fullsize."
                   (map (fn [src]
                          (let [i (js/Image.)]
                            (set! (.-onload i) #(put! finished [src i]))
-                           (set! (.-onerror i) #(put! finished [src i]))
+                           (set! (.-onerror i) #(put! finished [src nil]))
                            (set! (.-onabort i) #(js/alert "abort"))
                            (set! (.-src i) src)
                            i))
