@@ -2,6 +2,7 @@
   (:require [PIXI]
             [infinitelives.pixi.sprite :as sprite]
             [infinitelives.utils.string :as string]
+            [infinitelives.utils.sound :as sound]
             [infinitelives.utils.events :as events]
             [infinitelives.utils.console :refer [log]]
             [cljs.core.async :refer [chan put! <! timeout close!]])
@@ -95,6 +96,11 @@
             (PIXI/Texture.fromImage
              (str url "#") true (aget PIXI/scaleModes "NEAREST"))})))
 
+(defn register
+  [url obj]
+  (register-texture url obj)
+  (sound/register-sound url))
+
 (defn load-urls
   "loads each url in the passed in list as an image. Updates the progress
 as it goes with
@@ -120,7 +126,7 @@ fullsize."
               (<! (timeout (* (:debug-delay options) 1000)))) ;; artificial random delay (up to 1 ec)
 
             ;; setup a pixi texture keyed by the tail of its filename
-            (register-texture url img)
+            (register url img)
 
             ;; update progress bar and add image
             (.setTexture progress-bar
