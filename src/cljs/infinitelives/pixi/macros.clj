@@ -48,3 +48,9 @@
              (when ~form
                  ~@body
                  (recur ~test)))))
+
+(defmacro with-canvas
+  "Set the default canvas context to that specified"
+  [canvas & body]
+  `(binding [infinitelives.pixi.canvas/*canvas* ~canvas]
+     ~@body))

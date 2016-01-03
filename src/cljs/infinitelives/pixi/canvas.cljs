@@ -10,6 +10,7 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
 )
 
+(def ^:dynamic *canvas* nil)
 
 (defn make
   "make a new pixi canvas, or initialise pixi with an existing canvas.
