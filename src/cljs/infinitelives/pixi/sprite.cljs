@@ -11,7 +11,7 @@
 
 (defn make-sprite
   "construct a sprite by its texture. optionally pass in other things"
-  [texture & {:keys [x y xhandle yhandle scale alpha]
+  [texture & {:keys [x y xhandle yhandle scale alpha interactive mousedown]
               :or {x 0 y 0
                    xhandle 0.5 yhandle 0.5
                    scale 1
@@ -27,6 +27,8 @@
               (make-point (get scale 0) (get scale 1)))))
     (when-not (= 1 alpha)
       (set! (.-alpha s) alpha))
+    (when-not (nil? interactive) (set! (.-interactive s) interactive))
+    (when-not (nil? mousedown) (set! (.-mousedown s) mousedown))
     s))
 
 (defn set-pos!
