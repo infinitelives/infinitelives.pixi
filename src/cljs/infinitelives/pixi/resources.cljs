@@ -96,10 +96,35 @@
             (PIXI/Texture.fromImage
              (str url "#") true (aget PIXI/scaleModes "NEAREST"))})))
 
+(defn- identify-file [url]
+  (condp #(%1 %2) (string/get-extension url)
+    #{"ogg" "mp3" "wav"} :sound
+    #{"png" "jpg" "gif"} :image
+    :unknown))
+
 (defn register
   [url obj]
-  (register-texture url obj)
-  (sound/register-sound url))
+  (case (identify-file url)
+    :image
+    (register-texture url obj)
+
+    :sound
+    (sound/register-sound url obj)
+
+    :default
+    ))
+
+(defn- load-image [url finished]
+  (let [i (js/Image.)]
+    (set! (.-onload i) #(put! finished [url i]))
+    (set! (.-onerror i) #(put! finished [url nil]))
+    (set! (.-onabort i) #(js/alert "abort"))
+    (set! (.-src i) url)
+    i))
+
+(defn- load-sound [url finished]
+  (go
+    (put! finished [url (<! (sound/load-sound url))])))
 
 (defn load-urls
   "loads each url in the passed in list as an image. Updates the progress
@@ -112,12 +137,16 @@ fullsize."
           num-urls (count urls)                   ;; how many urls
           images (doall                           ;; start loading all the urls
                   (map (fn [src]
-                         (let [i (js/Image.)]
-                           (set! (.-onload i) #(put! finished [src i]))
-                           (set! (.-onerror i) #(put! finished [src nil]))
-                           (set! (.-onabort i) #(js/alert "abort"))
-                           (set! (.-src i) src)
-                           i))
+                         (case (identify-file src)
+                           :image
+                           (load-image src finished)
+
+                           :sound
+                           (load-sound src finished)
+
+                           :unknown
+                           (load-image src finished)
+                           ))
                        urls))]
       (go
         (loop [i 1]
