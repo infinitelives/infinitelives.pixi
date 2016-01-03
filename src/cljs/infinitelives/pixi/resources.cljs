@@ -76,7 +76,7 @@
 
 
 (defn get-texture [key scale]
-  (scale (key @!textures)))
+  (scale (get @!textures key)))
 
 ;; setup a pixi texture keyed by the tail of its filename
 (defn- register-texture
