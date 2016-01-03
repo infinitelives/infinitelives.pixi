@@ -35,11 +35,11 @@
           layer (second bindings)
           val (nth bindings 2)]
       `(let [~symb ~val
-             canvas# infinitelives.pixi.canvas/*canvas*]
+             canvas# (infinitelives.pixi.canvas/get)]
          (.addChild
           (get-layer canvas# ~layer)
           ~symb)
-         (with-sprite ~(subvec bindings 3) ~@body)
+         (with-layered-sprite ~(subvec bindings 3) ~@body)
          (.removeChild
           (get-layer canvas# ~layer)
           ~symb)))
@@ -68,9 +68,3 @@
              (when ~form
                  ~@body
                  (recur ~test)))))
-
-(defmacro with-canvas
-  "Set the default canvas context to that specified"
-  [canvas & body]
-  `(binding [infinitelives.pixi.canvas/*canvas* ~canvas]
-     ~@body))
