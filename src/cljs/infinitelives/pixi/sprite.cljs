@@ -1,6 +1,7 @@
 (ns infinitelives.pixi.sprite
   (:require [PIXI]
             [infinitelives.utils.vec2 :as vec2]
+            [infinitelives.pixi.texture :as texture]
             )
 )
 
@@ -16,7 +17,7 @@
                    xhandle 0.5 yhandle 0.5
                    scale 1
                    alpha 1}}]
-  (let [s (PIXI/Sprite. texture)]
+  (let [s (PIXI/Sprite. (if (keyword? texture) (texture/get texture) texture))]
     (set! (.-anchor s) (make-point xhandle yhandle))
     (set! (.-x s) x)
     (set! (.-y s) y)
@@ -57,7 +58,9 @@
    (set! (.-scale sprite) (make-point sx sy))))
 
 (defn set-texture! [sprite tex]
-  (.setTexture sprite tex))
+  (if (keyword? tex)
+    (.setTexture sprite (texture/get tex))
+    (.setTexture sprite tex)))
 
 
 (defn get-pos
