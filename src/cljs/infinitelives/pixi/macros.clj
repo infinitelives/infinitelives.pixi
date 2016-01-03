@@ -25,6 +25,26 @@
          (.removeChild (get-layer ~canvas ~layer) ~symb)))
     `(do ~@body)))
 
+(defmacro with-layered-sprite [bindings & body]
+  (assert-args
+   (vector? bindings) "a vector for its binding"
+   (= 0 (mod (count bindings) 3)) "triplets of forms in binding vector")
+
+  (if (pos? (count bindings))
+    (let [symb (first bindings)
+          layer (second bindings)
+          val (nth bindings 2)]
+      `(let [~symb ~val
+             canvas# infinitelives.pixi.canvas/*canvas*]
+         (.addChild
+          (get-layer canvas# ~layer)
+          ~symb)
+         (with-sprite ~(subvec bindings 3) ~@body)
+         (.removeChild
+          (get-layer canvas# ~layer)
+          ~symb)))
+    `(do ~@body)))
+
 (defmacro with-sprite-set [canvas layer bindings & body]
   (assert-args
    (vector? bindings) "a vector for its binding"
