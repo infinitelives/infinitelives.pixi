@@ -79,7 +79,7 @@
   (scale (get @!textures key)))
 
 ;; setup a pixi texture keyed by the tail of its filename
-(defn- register-texture
+(defn- register-texture!
   [url img]
   (when (string/ends-with? url ".png")
     (swap! !textures
@@ -106,10 +106,10 @@
   [url obj]
   (case (identify-file url)
     :image
-    (register-texture url obj)
+    (register-texture! url obj)
 
     :sound
-    (sound/register-sound url obj)
+    (sound/register-sound! url obj)
 
     :default
     ))
@@ -199,7 +199,7 @@ fullsize."
       (<! (apply (partial load-urls urls b) options))
 
       ;; load is done. return message
-      (>! c true)
+      ;(>! c true)
 
       ;; delay a tiny bit
       (<! (timeout 300))
