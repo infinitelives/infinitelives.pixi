@@ -10,7 +10,28 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
 )
 
-(def ^:dynamic *canvas* nil)
+(def canvas-store (atom {}))
+
+(defn add!
+  ([key canvas]
+   (swap! canvas-store assoc key canvas))
+  ([canvas]
+   (add! :default canvas)))
+
+(defn set-default-once!
+  [canvas]
+  (when-not (:default @canvas-store)
+    (add! canvas)))
+
+(defn remove!
+  ([key]
+   (swap! canvas-store dissoc key)))
+
+(defn get
+  ([key]
+   (key @canvas-store))
+  ([]
+   (:default @canvas-store)))
 
 (defn make
   "make a new pixi canvas, or initialise pixi with an existing canvas.
@@ -165,14 +186,16 @@
 
           resizer-loop
           (when (:expand opts) (let [c (events/new-resize-chan)]
-                           (go (while true
-                                 (let [[width height] (<! c)]
-                                   (resize-fn width height)
-                                   (render-fn))))))]
+                                 (go (while true
+                                       (let [[width height] (<! c)]
+                                         (resize-fn width height)
+                                         (render-fn))))))]
 
-      (into
-       world
-       {
-        :render-fn render-fn
-        :resize-fn resize-fn
-        :expand-fn expand-fn}))))
+      (let [canvas (into
+                    world
+                    {
+                     :render-fn render-fn
+                     :resize-fn resize-fn
+                     :expand-fn expand-fn})]
+        (set-default-once! canvas)
+        canvas))))
