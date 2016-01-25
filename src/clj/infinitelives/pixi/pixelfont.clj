@@ -50,17 +50,21 @@
 (def horizontal-strips (partial strips transparent-hlines :y))
 (def vertical-strips (partial strips transparent-vlines :x))
 
-(defn char-dimensions [image xi1 xi2 yi1 yi2 chars]
+(defn char-dimensions
+  "returns a sequence of vectors
+  [x1 x2 y1 y2 char]"
+  [image xi1 xi2 yi1 yi2 chars]
   (let [hstrips (horizontal-strips image xi1 xi2 yi1 yi2)
         vsize (apply max (map #(Math/abs (apply - %)) hstrips))]
     (map
-     conj
-     (for [[y1 y2] hstrips
-           [x1 x2] (vertical-strips image xi1 xi2 y1 y2)]
-       [x1 x2 y1 (+ y1 vsize)])
+     #(assoc %1 :char %2)
+     (for [[row [y1 y2]] (map-indexed vector hstrips)
+           [pos [x1 x2]] (map-indexed vector (vertical-strips image xi1 xi2 y1 y2))]
+       {:x1 x1 :y1 y1 :x2 x2 :y2 (+ y1 vsize) :row row :pos pos})
      chars)))
 
-
+(defn offset-dimensions [dimensions key update-fn]
+  (map #(update % key update-fn) dimensions))
 
 (comment
   (def a (-> "test.png"
@@ -68,7 +72,14 @@
              ImageIO/read
                                         ;(horizontal-strips 0 200 0 200)
                                         ;(process-line 0 1000 89 96)
-             (char-dimensions 127 350 84 128 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
+
+
+
+
+
+             (char-dimensions 127 350 84 128 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"))
+    (offset-dimensions :x2 dec)
+
     )
 
   )
