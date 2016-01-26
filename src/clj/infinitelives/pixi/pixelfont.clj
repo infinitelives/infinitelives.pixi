@@ -63,8 +63,17 @@
        {:x1 x1 :y1 y1 :x2 x2 :y2 (+ y1 vsize) :row row :pos pos})
      chars)))
 
-(defn offset-dimensions [dimensions key update-fn]
-  (map #(update % key update-fn) dimensions))
+(defn offset-dimensions [dimensions key update-fn & args]
+  (map #(apply update % key update-fn args) dimensions))
+
+(defn process-row
+  "for every char in dimensions that lie in row,
+  run function update-fn on it with args."
+  [dimensions row key update-fn & args]
+  (->> dimensions
+       (map #(if (= (:row %) row)
+               (apply update % key update-fn args)
+               %))))
 
 (comment
   (def a (-> "test.png"
@@ -77,8 +86,10 @@
 
 
 
-             (char-dimensions 127 350 84 128 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"))
-    (offset-dimensions :x2 dec)
+             (char-dimensions 127 350 84 128 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
+             (offset-dimensions :x2 dec)
+             (process-row 0 :x1 + 10)
+             (process-row 1 :x2 number?))
 
     )
 
