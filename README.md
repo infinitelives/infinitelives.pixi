@@ -151,7 +151,7 @@ Now you can use these registered textures in sprites:
 
 # Complete example
 
-Here is a complete port of the spinning bunny from the intro example to pixi.js for comparison. If you ignore the namespace declaration, it's quite a bit shorter than the pixi.js one. But we also get an asset loader bar, and a csp based system for controlling state that isn't mutatey, unlike the event driven JS version.
+Here is a complete port of the spinning bunny from the intro example to pixi.js for comparison. If you ignore the namespace declaration, it's a bit shorter than the pixi.js one. But we also get an asset loader bar, and a csp based system for controlling state that isn't mutatey, unlike the event driven JS version.
 
 ```clojure
 (ns demo.core
