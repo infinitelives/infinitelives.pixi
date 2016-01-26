@@ -166,10 +166,7 @@ Here is a complete example of the spinning bunny from the intro example to pixi.
 
 (defonce canvas
   (c/init
-   {:expand true
-    :engine :auto
-    :layers [:bg]
-    :background 0x505050}))
+   {:background 0x1099bb}))
 
 (defonce render-thread
   (go
@@ -177,22 +174,23 @@ Here is a complete example of the spinning bunny from the intro example to pixi.
       (<! (e/next-frame))
       ((:render-fn canvas)))))
 
-(go
-  (<!
-    (r/load-resources
-	(-> canvas :layer :bg)
-    	["https://pixijs.github.io/examples/_assets/basics/bunny.png"]))
+(defonce main-thread
+  (go
+    (<!
+      (r/load-resources
+  	(-> canvas :layer :bg)
+      	["https://pixijs.github.io/examples/_assets/basics/bunny.png"]))
 
-  (t/load-sprite-sheet!
-    (r/get-texture :bunny :nearest)
-    {:rabbit {:pos [0 0] :size [16 16]}})
+    (t/load-sprite-sheet!
+      (r/get-texture :bunny :nearest)
+      {:rabbit {:pos [0 0] :size [16 16]}})
 
-  (m/with-sprite canvas :bg
-    [rabbit (s/make-sprite :rabbit)]
-    (loop [angle 0]
-      (s/set-rotation! rabbit angle)
-      (<! (e/next-frame))
-      (recur (+ 0.1 angle)))))
+    (m/with-sprite canvas :bg
+      [rabbit (s/make-sprite :rabbit)]
+      (loop [angle 0]
+        (s/set-rotation! rabbit angle)
+        (<! (e/next-frame))
+        (recur (+ 0.1 angle)))))
 ```
 
 Compare and contrast with the original here:
