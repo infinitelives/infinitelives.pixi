@@ -30,11 +30,6 @@
     (image-set-all-transparent?
      image (vertical-strip x y1 y2))))
 
-;; (defn -main
-;;   "I don't do a whole lot ... yet."
-;;   [& args]
-;;   (println "Hello, World!"))
-
 (defn strips [strip-fn dim image x1 x2 y1 y2]
   (let [strip-sizes
         (-> image
