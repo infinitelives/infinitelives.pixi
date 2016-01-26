@@ -45,7 +45,7 @@ resources/load-resources initiates the pre loading of assets. It immediately ret
 
 ```clojure
 (resources/load-resources
-  (-> canvas :layer :ui)    ;; which layer I want the loading bar on
+    canvas :ui          ;; which layer I want the loading bar on
     [
       "sfx/bloop.ogg"
       "sfx/bing.ogg"
