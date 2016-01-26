@@ -10,6 +10,9 @@
                  ;; depend on utils
                  [infinitelives.utils/infinitelives.utils "0.1.0-SNAPSHOT"]
 
+                 ;; we need pixi
+                 [cljsjs/pixi "3.0.7-0"]
+
                  ;; should we depend on this? maybe its better without?
                  [prismatic/dommy "1.1.0"]
                  ]
