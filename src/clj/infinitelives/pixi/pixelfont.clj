@@ -1,5 +1,6 @@
 (ns infinitelives.pixi.pixelfont
-  (:require [clojure.java.io :as io])
+  (:require [clojure.java.io :as io]
+            [clojure.string :as string])
   (:import [javax.imageio ImageIO]))
 
 (defn horizontal-strip [y x1 x2]
@@ -68,6 +69,46 @@
        (map #(if (= (:row %) row)
                (apply update % key update-fn args)
                %))))
+
+(defn filename->keyword [fname]
+  (-> fname
+      (string/split #"/")
+      last
+      (string/split #"\.")
+      first
+      keyword))
+
+(def default-chars "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!\"#$%&'()*+,-./0123456789:;<=>?@[\\]^_`{|}~")
+
+(def ascii-chars "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~")
+
+(defmacro pixel-font[font-name filename [x1 y1] [x2 y2] &
+                     {:keys [chars processors]
+                      :or {chars default-chars
+                           processors []}}]
+  (let [image (-> filename io/file ImageIO/read)
+        dimensions (char-dimensions image x1 x2 y1 y2 chars)
+        final-dims (reduce
+                    (fn [acc [func & args]]
+                      (eval (concat [func (vec acc)] args)))
+                    dimensions
+                    processors)]
+    `(load-pixel-font
+      ~font-name
+      ~(filename->keyword filename)
+      ~(vec (for [{:keys [char x1 y1 x2 y2]} final-dims]
+              [char x1 y1 x2 y2])))))
+
+(comment
+  (macroexpand '(pixel-font :test-font "test.png" [127 84] [350 128]
+                            :processors [
+                                         (offset-dimensions :x2 dec)
+                                         (process-row 0 :x1 + 10)
+                                         ]
+                            :chars "AB"))
+)
+
+
 
 (comment
   (def a (-> "test.png"
