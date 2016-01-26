@@ -183,14 +183,13 @@ This example is in the `examples/basic` folder. After installing infinitelives.p
 
 So that should get you started. Read the source and the doc strings for more. Or use doc on the repl to query the docstrings.
 
-For examples, look at:
+For older examples, look at:
 
 https://github.com/retrogradeorbit/ld34
-
-Older examples using older versions of the library (may not run, but will give you good ideas):
-
 https://github.com/retrogradeorbit/splash
 https://github.com/retrogradeorbit/ludumdare33
+
+Older examples using older versions of the library may not run, but will give you hints as to how it works.
 
 ## Running Tests
 ```bash
