@@ -156,11 +156,11 @@ Here is a complete example of the spinning bunny from the intro example to pixi.
 ```clojure
 (ns demo.core
     (:require [infinitelives.pixi.canvas :as c]
-    	      [infinitelives.pixi.events :as e]
-	      [infinitelives.pixi.resource :as r]
-	      [infinitelives.pixi.texture :as t]
-	      [infinitelives.pixi.sprite :as s]
-	      [cljs.core.async :refer [<!]])
+              [infinitelives.pixi.events :as e]
+              [infinitelives.pixi.resource :as r]
+              [infinitelives.pixi.texture :as t]
+              [infinitelives.pixi.sprite :as s]
+              [cljs.core.async :refer [<!]])
     (:require-macros [cljs.core.async.macros :refer [go]]
                      [infinitelives.pixi.macros :as m]))
 
