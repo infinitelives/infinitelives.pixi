@@ -154,10 +154,10 @@ Now you can use these registered textures in sprites:
 Here is a complete port of the spinning bunny from the intro example to pixi.js for comparison. If you ignore the namespace declaration, it's about the same length as the pixi.js one. But we also get an asset loader bar, and a csp based system for controlling state that isn't mutatey, unlike the event driven JS version. That is, the angle of the bunny is completely dependent on the value of `angle` within the `loop`/`recur` block, and not dependent in any way on the _existing_ angle of rotation of the sprite.
 
 ```clojure
-(ns demo.core
+(ns basic.core
     (:require [infinitelives.pixi.canvas :as c]
               [infinitelives.pixi.events :as e]
-              [infinitelives.pixi.resource :as r]
+              [infinitelives.pixi.resources :as r]
               [infinitelives.pixi.texture :as t]
               [infinitelives.pixi.sprite :as s]
               [cljs.core.async :refer [<!]])
@@ -167,28 +167,18 @@ Here is a complete port of the spinning bunny from the intro example to pixi.js 
 (defonce canvas
   (c/init {:layers [:bg] :background 0x1099bb}))
 
-(defonce render-thread
-  (go
-    (while true
-      (<! (e/next-frame))
-      ((:render-fn canvas)))))
-
 (defonce main-thread
   (go
-    (<!
-      (r/load-resources canvas :bg
-      	["https://pixijs.github.io/examples/_assets/basics/bunny.png"]))
+    (<! (r/load-resources canvas :bg ["img/bunny.png"]))
 
-    (t/load-sprite-sheet!
-      (r/get-texture :bunny :nearest)
-      {:rabbit {:pos [0 0] :size [16 16]}})
+    (t/set-texture! :rabbit (r/get-texture :bunny :nearest))
 
     (m/with-sprite canvas :bg
       [rabbit (s/make-sprite :rabbit)]
       (loop [angle 0]
         (s/set-rotation! rabbit angle)
         (<! (e/next-frame))
-        (recur (+ 0.1 angle)))))
+        (recur (+ 0.1 angle))))))
 ```
 
 Compare and contrast with the original here:
