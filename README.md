@@ -1,13 +1,13 @@
 # infinitelives.pixi
 2D Game functionality that depends apon pixi.js. Uses Pixi via :foreign-libs as a first class namespace.
 
-# Setup
+## Setup
 
 Infinitelives is not ready for clojars. And so to use it, you need to install it. This involves checking the clojure source out. Then issuing `lein install` in their root.
 
 Before installing infinitelives.pixi, you will need to install infinitelives.utils. Check out the infinitelives.utils source and `lein install`. Then repeat again with the infinitelives.pixi source. Then you are ready to use in your project.
 
-# Starting a project
+## Starting a project
 
 To start a standalone, client-side only game, a good basis is the figwheel template. `lein new figwheel myproj`.
 
@@ -17,7 +17,7 @@ To use the installed libraries, add the following to dependencies in project.clj
 [infinitelives.pixi/infinitelives.pixi "0.1.0-SNAPSHOT"]
 ```
 
-# Initialising a canvas
+## Initialising a canvas
 
 Near the start of your core.cljs, defonce a canvas like:
 
@@ -35,21 +35,9 @@ Near the start of your core.cljs, defonce a canvas like:
     }))
 ```
 
-This should set up an autosizing canvas with the layers created and laid out like specified. However the canvas includes no rendering code, so you will have to render your canvas every frame, maybe with something like:
+This should set up an autosizing canvas with the layers created and laid out like specified.
 
-```clojure
-(:require [infinitelives.utils.events :as events])
-```
-...
-```clojure
-(defonce render-thread
-  (go
-    (while true
-      (<! (events/next-frame))
-      ((:render-fn canvas)))))
-```
-
-# Loading Assets
+## Loading Assets
 
 One approach to start a game-jam game architecture is one entry go-thread that pre-loads all the assets for the game and registers them in the resources atoms.
 
@@ -77,7 +65,7 @@ resources/load-resources initiates the pre loading of assets. It immediately ret
     :fade-out 0.5)
 ```
 
-# Registering Textures or SubTextures
+## Registering Textures or SubTextures
 
 Often, graphics assets are comprised of many individual image frames laid out on a larger `spritesheet`. You can register any region of any loaded image asset as a tagged texture. You specify the tag as a keyword. For example:
 
@@ -120,7 +108,7 @@ You can load many assets by defining an asset data structure:
   sprites-assets)
 ```
 
-# Adding Sprites
+## Adding Sprites
 
 Now you can use these registered textures in sprites:
 
@@ -149,7 +137,7 @@ Now you can use these registered textures in sprites:
       (recur (inc frame))))
 ```
 
-# Complete example
+## Complete example
 
 Here is a complete port of the spinning bunny from the intro example to pixi.js for comparison. Even with the large namespace declaration, it's about the same length as the pixi.js one. But we also get an asset loader bar, and a csp based system for controlling state that isn't mutatey, unlike the event driven JS version. That is, the angle of the bunny is completely dependent on the value of `angle` within the `loop`/`recur` block, and not dependent in any way on the _existing_ angle of rotation of the sprite.
 
@@ -185,7 +173,7 @@ Compare and contrast with the original here:
 
 https://pixijs.github.io/examples/index.html?s=basics&f=basic.js&title=Basics
 
-# You're on your own
+## You're on your own
 
 So that should get you started. Read the source and the doc strings for more. Or use doc on the repl to query the docstrings.
 
@@ -198,7 +186,7 @@ Older examples using older versions of the library (may not run, but will give y
 https://github.com/retrogradeorbit/splash
 https://github.com/retrogradeorbit/ludumdare33
 
-# Running Tests
+## Running Tests
 ```bash
 $ lein cljsbuild test
 ```
