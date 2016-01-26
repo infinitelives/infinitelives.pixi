@@ -183,7 +183,7 @@ This example is in the `examples/basic` folder. After installing infinitelives.p
 
 So that should get you started. Read the source and the doc strings for more. Or use doc on the repl to query the docstrings.
 
-For older examples, look at:
+For other, older examples, look at:
 
 https://github.com/retrogradeorbit/ld34
 https://github.com/retrogradeorbit/splash
