@@ -176,8 +176,7 @@ Here is a complete example of the spinning bunny from the intro example to pixi.
 (defonce main-thread
   (go
     (<!
-      (r/load-resources
-  	(-> canvas :layer :bg)
+      (r/load-resources (-> canvas :layer :bg)
       	["https://pixijs.github.io/examples/_assets/basics/bunny.png"]))
 
     (t/load-sprite-sheet!
