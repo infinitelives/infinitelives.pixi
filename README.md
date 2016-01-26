@@ -1,5 +1,5 @@
 # infinitelives.pixi
-2D Game functionality that depends apon pixi.js. Uses Pixi via :foreign-libs as a first class namespace.
+2D Game functionality that depends apon pixi.js. Uses Pixi via cljsjs package.
 
 ## Setup
 
