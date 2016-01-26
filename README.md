@@ -37,11 +37,11 @@ Near the start of your core.cljs, defonce a canvas like:
 
 This should set up an autosizing canvas with the layers created and laid out like specified. However the canvas includes no rendering code, so you will have to render your canvas every frame, maybe with something like:
 
-```
+```clojure
 (:require [infinitelives.utils.events :as events])
 ```
 ...
-```
+```clojure
 (defonce render-thread
   (go
     (while true
