@@ -38,7 +38,6 @@
                  (partition-by second)
                  (map count))
             )]
-    ;strip-sizes
     (partition 2 (for [n (range (count strip-sizes))]
                    (apply + (case dim :y y1 :x x1) (take (inc n) strip-sizes))))))
 
