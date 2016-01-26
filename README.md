@@ -176,7 +176,7 @@ Here is a complete port of the spinning bunny from the intro example to pixi.js 
 (defonce main-thread
   (go
     (<!
-      (r/load-resources (-> canvas :layer :bg)
+      (r/load-resources canvas :bg
       	["https://pixijs.github.io/examples/_assets/basics/bunny.png"]))
 
     (t/load-sprite-sheet!

@@ -185,12 +185,12 @@ fullsize."
         (set! (.-alpha spr) (+ start (* (- end start) (/ (- ticks i) ticks))))
         (when (pos? i) (recur (dec i)))))))
 
-(defn load-resources [s urls & {:keys [fade-in fade-out]
+(defn load-resources [canvas layer urls & {:keys [fade-in fade-out]
                       :or {fade-in 0.5 fade-out 0.5}
                       :as options}]
-  (log "!")
+  ;(log "!")
   (let [c (chan)
-        b (add-prog-bar s options)]
+        b (add-prog-bar (-> canvas :layer layer) options)]
     (go
       ;; fade in
       (<! (fadein b :duration fade-in))
@@ -208,7 +208,7 @@ fullsize."
       (<! (fadeout b :duration fade-out))
 
       ;; remove progress bar sprite
-      (.removeChild s b)
+      (.removeChild (-> canvas :layer layer) b)
 
       (close! c))
     c))
