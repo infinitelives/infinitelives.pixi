@@ -31,7 +31,7 @@ Near the start of your core.cljs, defonce a canvas like:
    {:expand true
     :engine :auto
     :layers [:bg :world :float :ui]
-    :background 0xa2d000 ;0x505050
+    :background 0x505050
     }))
 ```
 
