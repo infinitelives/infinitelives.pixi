@@ -145,6 +145,8 @@ https://pixijs.github.io/examples/index.html?s=basics&f=basic.js&title=Basics
 
 Even with the large namespace declaration, it's about the same length as the pixi.js one. But we also get an asset loader bar, and a csp based system for controlling state that isn't mutatey, unlike the event driven JS version. That is, the angle of the bunny is completely dependent on the value of `angle` within the `loop`/`recur` block, and not dependent in any way on the _existing_ angle of rotation of the sprite.
 
+This example is in the `examples/basic` folder. After installing infinitelives.pixi, go into that directory and issue a `lein figwheel`. Then when the server has started, point your browser at http://localhost:3449/
+
 ```clojure
 (ns basic.core
     (:require [infinitelives.pixi.canvas :as c]
