@@ -84,6 +84,6 @@ $ lein cljsbuild test
 
 ## License
 
-Copyright © 2015 Crispin Wellington
+Copyright © 2015 - 2016 Crispin Wellington
 
 Distributed under the Eclipse Public License either version 1.0 or (at your option) any later version.
