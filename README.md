@@ -86,7 +86,7 @@ Often, graphics assets are comprised of many individual image frames laid out on
 	  [infinitelives.pixi.resources :as resources])
 
 (texture/load-sprite-sheet!
-  (resources/get-texture :sprites :nearest)   ;; :sprites refers to the filename sprintes.png.
+  (resources/get-texture :sprites :nearest)   ;; :sprites refers to the filename sprites.png.
                                               ;; as the loader loads them, it registers them
                                               ;; with their filename's base as a keyword.
   {:player-standing {:pos [0 0] :size [16 16]}})
