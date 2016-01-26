@@ -77,6 +77,91 @@ resources/load-resources initiates the pre loading of assets. It immediately ret
     :fade-out 0.5)
 ```
 
+# Registering Textures or SubTextures
+
+Often, graphics assets are comprised of many individual image frames laid out on a larger `spritesheet`. You can register any region of any loaded image asset as a tagged texture. You specify the tag as a keyword. For example:
+
+```clojure
+(:require [infinitelives.pixi.texture :as texture]
+	  [infinitelives.pixi.resources :as resources])
+
+(texture/load-sprite-sheet!
+  (resources/get-texture :sprites :nearest)   ;; :sprites refers to the filename sprintes.png.
+                                              ;; as the loader loads them, it registers them
+                                              ;; with their filename's base as a keyword.
+  {:player-standing {:pos [0 0] :size [16 16]}})
+```
+
+You can load many assets by defining an asset data structure:
+
+```clojure
+(def sprites-assets
+  {:ground-1
+   {:pos [0 0]
+    :size [32 24]}
+   :ground-2
+   {:pos [32 0]
+    :size [16 16]}
+   :grass-1
+   {:pos [48 0]
+    :size [16 16]}
+   :grass-2
+   {:pos [64 0]
+    :size [16 16]}
+   :tree-1
+   {:pos [31 56]
+    :size [9 16]}
+   :tree-2
+   {:pos [48 56]
+    :size [8 16]}})
+
+(texture/load-sprite-sheet!
+  (resource/get-texture :sprites :nearest)
+  sprites-assets)
+```
+
+# Adding Sprites
+
+Now you can use these registered textures in sprites:
+
+```clojure
+
+(macros/with-sprite canvas :world    ;; the canvas and layer the sprite should be on
+  ;; now name -> sprite binding pairs in a vector
+  [ground (sprite/make-sprite
+  	    :ground-1
+	    :scale 3
+	    :xhandle 0.5 :yhandle 0.5
+	    :alpha 1.0)
+   tree (sprite/make-sprite
+   	  :tree-2
+	  :x 100 :y 100
+	  :y-handle 1.0)]
+    ;; inside the scope of the macro, the sprite is on the layer
+    ;; apon exit from the scope, the sprite is removed and disappears
+    ;; So, loop forever, flipping the frames of the grass and tree
+    (loop [frame 0]
+      (<! (events/next-frame!))
+      (sprite/set-texture! ground (if (> (mod frame 60) 30)
+                                    :ground-1 :ground-2))
+      (sprite/set-texture! tree (if (> (mod frame 200) 100)
+                                    :tree-1 :tree-2))
+      (recur (inc frame))))
+```
+
+# You're on your own
+
+So that should get you started. Read the source and the doc strings for more. Or use doc on the repl to query the docstrings.
+
+For examples, look at:
+
+https://github.com/retrogradeorbit/ld34
+
+Older examples using older versions of the library (may not run, but will give you good ideas):
+
+https://github.com/retrogradeorbit/splash
+https://github.com/retrogradeorbit/ludumdare33
+
 # Running Tests
 ```bash
 $ lein cljsbuild test
