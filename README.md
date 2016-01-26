@@ -165,7 +165,7 @@ Here is a complete port of the spinning bunny from the intro example to pixi.js 
                      [infinitelives.pixi.macros :as m]))
 
 (defonce canvas
-  (c/init {:background 0x1099bb}))
+  (c/init {:layers [:bg] :background 0x1099bb}))
 
 (defonce render-thread
   (go
