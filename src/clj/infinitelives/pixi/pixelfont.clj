@@ -45,8 +45,8 @@
 (def vertical-strips (partial strips transparent-vlines :x))
 
 (defn char-dimensions
-  "returns a sequence of vectors
-  [x1 x2 y1 y2 char]"
+  "returns a sequence of maps (with keys :x1
+  :x2 :y1 :y2 :row :pos :char)"
   [image xi1 xi2 yi1 yi2 chars]
   (let [hstrips (horizontal-strips image xi1 xi2 yi1 yi2)
         vsize (apply max (map #(Math/abs (apply - %)) hstrips))]
