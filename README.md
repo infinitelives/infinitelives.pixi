@@ -153,7 +153,7 @@ Now you can use these registered textures in sprites:
 
 Here is a complete example of the spinning bunny from the intro example to pixi.js for comparison:
 
-```
+```clojure
 (ns demo.core
     (:require [infinitelives.pixi.canvas :as c]
     	      [infinitelives.pixi.events :as e]
