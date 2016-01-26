@@ -5,7 +5,7 @@
             [infinitelives.utils.events :as events]
             [infinitelives.utils.dom :as dom]
             [infinitelives.utils.console :refer [log]]
-            [PIXI])
+            [cljsjs.pixi])
 
   (:require-macros [cljs.core.async.macros :refer [go]])
 )
@@ -51,12 +51,13 @@
   :y             y position for the new canvas
   :width         width of new canvas
   :height        height of new canvas"
-  [{:keys [expand x y width height canvas engine]
+  [{:keys [expand x y width height canvas engine background]
       :or {expand false
            x 0
            y 0
            width 800
            height 600
+           background 0x500000
            engine :auto}}]
   (let [fswidth (.-innerWidth js/window)
         fsheight (.-innerHeight js/window)
@@ -72,13 +73,14 @@
                   "clearBeforeRender" true
                   "autoResize" false
                   "imageSmoothingEnabled" false
+                  "backgroundColor" background
                   }
 
         ;; make the renderer
         rend (case engine
-               :webgl (PIXI/WebGLRenderer. wid hig opts)
-               :canvas (PIXI/CanvasRenderer. wid hig opts)
-               (PIXI/autoDetectRenderer. wid hig opts))
+               :webgl (js/PIXI.WebGLRenderer. wid hig opts)
+               :canvas (js/PIXI.CanvasRenderer. wid hig opts)
+               (js/PIXI.autoDetectRenderer. wid hig opts))
 
         ;; details of the generated renderer
         actual-canvas (.-view rend)
@@ -110,16 +112,19 @@
 
 (defn make-stage
   "Layout the stage structure"
-  [{:keys [background layers]
-      :or {background 0x000000
+  [{:keys [layers
+           ]
+      :or {
            layers [:backdrop :below :world :above :ui :effect]}}]
 
   ;(.log js/console (str layers))
-  (let [stage (PIXI/Stage. background)
-        containers (map #(PIXI/DisplayObjectContainer.) layers)
+  (let [
+        ;stage (js/PIXI.Stage. background)
+        containers (map #(js/PIXI.Container.) layers)
         ]
     {
-     :stage stage
+     ;:stage stage
+     :layers layers
      :layer
      (into {}
            (for [[k v] (partition 2 (interleave layers containers))]
@@ -159,7 +164,7 @@
   :height        height of new canvas
   "
   [opts]
-  (let [{:keys [stage renderer canvas layer] :as world}
+  (let [{:keys [renderer canvas layer layers] :as world}
         (into (make opts)
               (make-stage opts))]
     ;; add the stages to the canvas
@@ -167,16 +172,22 @@
      (map
       (fn [[name layer-obj]]
         (log "adding to:" (str stage) " layer:" (str layer-obj))
-        (.addChild stage layer-obj)
+        ;(.addChild stage layer-obj)
         (center-container! canvas layer-obj)
         )
       layer))
 
     ;; do the first render
-    (.render renderer stage)
+    (doall (for [l layers] (.render renderer (l layer))))
+    ;(.render renderer stage)
 
     (let [
-          render-fn (fn [] (.render renderer stage))
+          render-fn (fn []
+
+                      ;(.render renderer stage)
+                      (doall (for [l layers] (.render renderer (l layer))))
+
+                      )
           resize-fn (fn [width height]
                       (.resize renderer width height)
                       (doall (map (partial center-container! canvas)
@@ -190,6 +201,13 @@
                                        (let [[width height] (<! c)]
                                          (resize-fn width height)
                                          (render-fn))))))]
+
+      ;; setup the render loop
+      (defn render []
+        (events/request-animation-frame render)
+        (render-fn))
+
+      (render)
 
       (let [canvas (into
                     world

@@ -1,5 +1,5 @@
 (ns infinitelives.pixi.sprite
-  (:require [PIXI]
+  (:require [cljsjs.pixi]
             [infinitelives.utils.vec2 :as vec2]
             [infinitelives.pixi.texture :as texture]
             )
@@ -8,7 +8,7 @@
 (defn make-point
   "Make a PIXI Point from x and y"
   [x y]
-  (PIXI/Point. x y))
+  (js/PIXI.Point. x y))
 
 (defn make-sprite
   "construct a sprite by its texture. optionally pass in other things"
@@ -17,7 +17,7 @@
                    xhandle 0.5 yhandle 0.5
                    scale 1
                    alpha 1}}]
-  (let [s (PIXI/Sprite. (if (keyword? texture) (texture/get texture) texture))]
+  (let [s (js/PIXI.Sprite. (if (keyword? texture) (texture/get texture) texture))]
     (set! (.-anchor s) (make-point xhandle yhandle))
     (set! (.-x s) x)
     (set! (.-y s) y)
@@ -57,10 +57,13 @@
   ([sprite sx sy]
    (set! (.-scale sprite) (make-point sx sy))))
 
+(defn set-rotation! [sprite theta]
+  (set! (.-rotation sprite) theta))
+
 (defn set-texture! [sprite tex]
   (if (keyword? tex)
-    (.setTexture sprite (texture/get tex))
-    (.setTexture sprite tex)))
+    (set! (.-texture sprite) (texture/get tex))
+    (set! (.-texture sprite) tex)))
 
 
 (defn get-pos

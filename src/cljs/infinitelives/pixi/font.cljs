@@ -5,7 +5,7 @@
             [infinitelives.utils.dom :as dom]
             [infinitelives.pixi.sprite :as sprite]
             [infinitelives.pixi.texture :as texture]
-            [PIXI]))
+            [cljsjs.pixi]))
 
 (def printable-characters
   " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?@#$%^&*()-=_+[]{};':\",.<>/`~\\|")
@@ -50,7 +50,7 @@
          dropShadowDistance 5}
     }
    ]
-  (let [spr (PIXI/Text. str
+  (let [spr (js/PIXI.Text. str
                            #js {
                                 :font font
                                 :fill fill
@@ -89,7 +89,7 @@
   "render a char at position [x y] onto a RenderTexture.
   returns that RenderTexture. Mutates RenderTexture"
   [rtex metrics char x y]
-  (let [contain (PIXI/DisplayObjectContainer.)
+  (let [contain (js/PIXI.DisplayObjectContainer.)
         c (-> char metrics :texture)]
     ;(.log js/console c x y)
     (set! (.-position.x c) x)
@@ -214,7 +214,7 @@
         [w h] (-> metrics
                   (make-rowset-sizes printable-characters)
                   calculate-font-layout-size)
-        texture (PIXI/RenderTexture. w h)
+        texture (js/PIXI.RenderTexture. w h)
         line-height (text-height metrics printable-characters)
         ]
     {
@@ -236,7 +236,7 @@
                        {:keys [x y] :or {x 0 y 0} :as options}]
   (let [buff (:texture font)
         metrics (:metrics font)
-        sb (PIXI/SpriteBatch. buff)
+        sb (js/PIXI.SpriteBatch. buff)
 
         ;; handle by center of text
         _ (set! (.-pivot.x sb) (int (/ (text-width metrics text) 2)))

@@ -1,5 +1,5 @@
 (ns infinitelives.pixi.resources
-  (:require [PIXI]
+  (:require [cljsjs.pixi]
             [infinitelives.pixi.sprite :as sprite]
             [infinitelives.utils.string :as string]
             [infinitelives.utils.sound :as sound]
@@ -31,7 +31,7 @@
                   lowlight-width 1
                   }
              :as options}]
-  (let [box (PIXI/Graphics.)]
+  (let [box (js/PIXI.Graphics.)]
     (doto box
       (.beginFill empty-colour)
       (.lineStyle 0 border-colour)
@@ -84,15 +84,15 @@
            assoc (string/url-keyword url)
            {
             :linear
-            (PIXI/Texture.fromImage
-             url true (aget PIXI/scaleModes "LINEAR"))
+            (js/PIXI.Texture.fromImage
+             url true (aget js/PIXI.scaleModes "LINEAR"))
 
             ;; this is a hack adding # to the tail of a url so pixi doesnt use the other
             ;; linear version
             ;; SEE: https://github.com/GoodBoyDigital/pixi.js/issues/1724
             :nearest
-            (PIXI/Texture.fromImage
-             (str url "#") true (aget PIXI/scaleModes "NEAREST"))})))
+            (js/PIXI.Texture.fromImage
+             (str url "#") true (aget js/PIXI.scaleModes "NEAREST"))})))
 
 (defn- identify-file [url]
   (condp #(%1 %2) (string/get-extension url)
@@ -156,7 +156,7 @@ fullsize."
             (register url img)
 
             ;; update progress bar and add image
-            (.setTexture progress-bar
+            (set! (.-texture progress-bar)
                          (progress-texture (/ i num-urls) options))
 
             ;; more images?

@@ -1,8 +1,8 @@
 (ns infinitelives.pixi.texture
-  (:require [PIXI]))
+  (:require [cljsjs.pixi]))
 
 (defn sub-texture [texture [x y] [w h]]
-  (PIXI/Texture. texture (PIXI/Rectangle. x y w h)))
+  (js/PIXI.Texture. texture (js/PIXI.Rectangle. x y w h)))
 
 (defonce texture-store (atom {}))
 
@@ -18,6 +18,10 @@
 (defn get
   [key]
   (@texture-store key))
+
+(defn set-texture!
+  [key texture]
+  (swap! texture-store assoc key texture))
 
 (defn load-sprite-sheet!
   [texture asset-description]
