@@ -67,13 +67,11 @@
 
     (.generateTexture box false)))
 
-
 (defn add-prog-bar [stage options]
   (let [s (sprite/make-sprite (progress-texture 0 options))]
     (set! (.-alpha s) 0)
     (.addChild stage s)
     s))
-
 
 (defn get-texture [key scale]
   (scale (get @!textures key)))
