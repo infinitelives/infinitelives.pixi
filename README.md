@@ -53,7 +53,7 @@ This should set up an autosizing canvas with the layers created and laid out lik
 
 One approach to start a game-jam game architecture is one entry go-thread that pre-loads all the assets for the game and registers them in the resources atoms.
 
-resources/load-resources initiates the pre loading of assets. It immediately returns a channel. Two events will be sent down it. The first one is at the end of all the assets loaded. However, the bar will still be displayed. The second event will be once the loading bar has completely faded out. Pull once from the channel if you want to start as soon as possible (with the bar still fading out). Pull twice to wait for complete fade out.
+resources/load-resources initiates the pre loading of assets. It immediately returns a channel. Pull once from the channel to wait for complete fade out of the loading bar.
 
 ```clojure
 (resources/load-resources
