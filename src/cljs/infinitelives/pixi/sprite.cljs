@@ -12,15 +12,18 @@
 
 (defn make-sprite
   "construct a sprite by its texture. optionally pass in other things"
-  [texture & {:keys [x y xhandle yhandle scale alpha interactive mousedown]
+  [texture & {:keys [x y xhandle yhandle scale alpha interactive mousedown
+                     rotation]
               :or {x 0 y 0
                    xhandle 0.5 yhandle 0.5
                    scale 1
-                   alpha 1}}]
+                   alpha 1
+                   rotation 0}}]
   (let [s (js/PIXI.Sprite. (if (keyword? texture) (texture/get texture) texture))]
     (set! (.-anchor s) (make-point xhandle yhandle))
     (set! (.-x s) x)
     (set! (.-y s) y)
+    (set! (.-rotation s) rotation)
     (when-not (= scale 1)
       (set! (.-scale s)
             (if (number? scale)
@@ -39,8 +42,7 @@
   ([sprite pos]
    (if (vector? pos)
      (set-pos! sprite (pos 0) (pos 1))
-     (set-pos! sprite (aget pos 0) (aget pos 1))
-     )))
+     (set-pos! sprite (aget pos 0) (aget pos 1)))))
 
 (defn set-anchor! [sprite x y]
   (set! (.-anchor sprite) (make-point x y)))
@@ -64,7 +66,6 @@
   (if (keyword? tex)
     (set! (.-texture sprite) (texture/get tex))
     (set! (.-texture sprite) tex)))
-
 
 (defn get-pos
   "return the position of sprite as a vec2.
