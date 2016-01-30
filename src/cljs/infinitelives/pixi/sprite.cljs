@@ -67,6 +67,9 @@
     (set! (.-texture sprite) (texture/get tex))
     (set! (.-texture sprite) tex)))
 
+(defn set-visible! [sprite visibility]
+  (set! (.-visible sprite) visibility))
+
 (defn get-pos
   "return the position of sprite as a vec2.
   optionally pass in an x and y offset to add
