@@ -119,7 +119,7 @@
 
   ;(.log js/console (str layers))
   (let [
-        stage (js/PIXI.Container. background)
+        stage (js/PIXI.Container.)
         containers (map #(js/PIXI.Container.) layers)
         ;; _ (doall (map #(.addChild stage %) containers))
         ]
