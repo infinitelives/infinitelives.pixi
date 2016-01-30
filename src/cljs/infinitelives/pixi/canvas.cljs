@@ -119,11 +119,12 @@
 
   ;(.log js/console (str layers))
   (let [
-        ;stage (js/PIXI.Stage. background)
+        stage (js/PIXI.Container. background)
         containers (map #(js/PIXI.Container.) layers)
+        ;; _ (doall (map #(.addChild stage %) containers))
         ]
     {
-     ;:stage stage
+     :stage stage
      :layers layers
      :layer
      (into {}
@@ -164,7 +165,7 @@
   :height        height of new canvas
   "
   [opts]
-  (let [{:keys [renderer canvas layer layers] :as world}
+  (let [{:keys [renderer canvas layer layers stage] :as world}
         (into (make opts)
               (make-stage opts))]
     ;; add the stages to the canvas
@@ -172,20 +173,23 @@
      (map
       (fn [[name layer-obj]]
         (log "adding to:" (str stage) " layer:" (str layer-obj))
-        ;(.addChild stage layer-obj)
+        (.addChild stage layer-obj)
         (center-container! canvas layer-obj)
         )
       layer))
 
     ;; do the first render
-    (doall (for [l layers] (.render renderer (l layer))))
-    ;(.render renderer stage)
+    ;(doall (for [l layers] (.render renderer (l layer))))
+    (.render renderer stage)
 
     (let [
           render-fn (fn []
 
-                      ;(.render renderer stage)
-                      (doall (for [l layers] (.render renderer (l layer))))
+                      (.render renderer stage)
+                      ;; (doall (for [l layers]
+                      ;;          (do
+                      ;;            (.log js/console "rendering:" l)
+                      ;;            (.render renderer (l layer)))))
 
                       )
           resize-fn (fn [width height]
