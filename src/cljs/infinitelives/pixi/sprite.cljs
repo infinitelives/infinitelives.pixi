@@ -13,17 +13,19 @@
 (defn make-sprite
   "construct a sprite by its texture. optionally pass in other things"
   [texture & {:keys [x y xhandle yhandle scale alpha interactive mousedown
-                     rotation]
+                     rotation visible]
               :or {x 0 y 0
                    xhandle 0.5 yhandle 0.5
                    scale 1
                    alpha 1
-                   rotation 0}}]
+                   rotation 0
+                   visible true}}]
   (let [s (js/PIXI.Sprite. (if (keyword? texture) (texture/get texture) texture))]
     (set! (.-anchor s) (make-point xhandle yhandle))
     (set! (.-x s) x)
     (set! (.-y s) y)
     (set! (.-rotation s) rotation)
+    (set! (.-visibile s) visible)
     (when-not (= scale 1)
       (set! (.-scale s)
             (if (number? scale)
