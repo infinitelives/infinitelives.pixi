@@ -237,15 +237,7 @@
     (.render renderer stage)
 
     (let [
-          render-fn (fn []
-
-                      (.render renderer stage)
-                      ;; (doall (for [l layers]
-                      ;;          (do
-                      ;;            (.log js/console "rendering:" l)
-                      ;;            (.render renderer (l layer)))))
-
-                      )
+          render-fn #(.render renderer stage)
           resize-fn (fn [width height]
                       (.resize renderer width height)
                       (doall (map (fn [[name layer-obj]]
