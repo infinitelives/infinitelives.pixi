@@ -1,17 +1,40 @@
 (ns pixelfont.core
-  (:require ))
+  (:require [infinitelives.pixi.canvas :as c]
+            [infinitelives.pixi.events :as e]
+            [infinitelives.pixi.resources :as r]
+            [infinitelives.pixi.texture :as t]
+            [infinitelives.pixi.sprite :as s]
+            [infinitelives.pixi.pixelfont :as pf]
+            [cljs.core.async :refer [<!]])
+  (:require-macros [cljs.core.async.macros :refer [go]]
+                   [infinitelives.pixi.macros :as m]
+                   [infinitelives.pixi.pixelfont :as pf]))
 
-(enable-console-print!)
+(defonce canvas
+  (c/init {:layers [:bg]
+           :background 0x404040
+           :expand true}))
 
-(println "Edits to this text should show up in your developer console.")
+(defonce main-thread
+  (go
+    (<! (r/load-resources canvas :bg ["img/fonts.png"]))
 
-;; define your app data so that it doesn't get over-written on reload
+    (pf/pixel-font :big "img/fonts.png" [127 84] [250 128]
+                   :chars ["ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                           "abcdefghijklmnopqrstuvwxyz"
+                           "0123456789!?#`'.,"])
 
-(defonce app-state (atom {:text "Hello world!"}))
 
+    (m/with-sprite canvas :bg
+      [text (pf/make-text :big "TestWordage")]
+      (while true (<! (e/next-frame)))
+      )
 
-(defn on-js-reload []
-  ;; optionally touch your app-state to force rerendering depending on
-  ;; your application
-  ;; (swap! app-state update-in [:__figwheel_counter] inc)
-)
+    ;(t/set-texture! :font (r/get-texture :fonts :nearest))
+
+    #_ (m/with-sprite canvas :bg
+      [rabbit (s/make-sprite :font :xhandle 0.2 :yhandle 0.2 :scale 2)]
+      (loop [angle 0]
+        ;(s/set-rotation! rabbit angle)
+        (<! (e/next-frame))
+        (recur (+ 0.01 angle))))))
