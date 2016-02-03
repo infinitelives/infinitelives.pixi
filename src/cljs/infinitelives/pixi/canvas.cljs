@@ -112,10 +112,11 @@
 
 (defn make-stage
   "Layout the stage structure"
-  [{:keys [layers
+  [{:keys [layers origins
            ]
       :or {
-           layers [:backdrop :below :world :above :ui :effect]}}]
+           layers [:backdrop :below :world :above :ui :effect]
+           origins {}}}]
 
   ;(.log js/console (str layers))
   (let [
@@ -125,6 +126,7 @@
         ]
     {
      :stage stage
+     :origins origins
      :layers layers
      :layer
      (into {}
@@ -132,17 +134,66 @@
              [k v]))}))
 
 
-(defn- center-container! [canvas layer]
+(defn- center-container! [canvas layer edge]
   (let [canvas-width (.-width canvas)
         canvas-height (.-height canvas)
         middle-x (Math/round (/ canvas-width 2))
         middle-y (Math/round (/ canvas-height 2))]
 
-    (log (str "w:" canvas-width " h:" canvas-height))
+    ;(log (str "w:" canvas-width " h:" canvas-height))
 
-    ;; start with world centered
-    (set! (.-position.x layer) middle-x)
-    (set! (.-position.y layer) middle-y)))
+    (case edge
+      :center
+      (do
+        ;; start with world centered
+        (set! (.-position.x layer) middle-x)
+        (set! (.-position.y layer) middle-y))
+
+      :top
+      (do
+        (set! (.-position.x layer) middle-x)
+        (set! (.-position.y layer) 0))
+
+      :bottom
+      (do
+        (set! (.-position.x layer) middle-x)
+        (set! (.-position.y layer) canvas-height))
+
+      :left
+      (do
+        (set! (.-position.x layer) 0)
+        (set! (.-position.y layer) middle-y))
+
+      :right
+      (do
+        (set! (.-position.x layer) canvas-width)
+        (set! (.-position.y layer) middle-y))
+
+      :top-left
+      (do
+        (set! (.-position.x layer) 0)
+        (set! (.-position.y layer) 0))
+
+      :top-right
+      (do
+        (set! (.-position.x layer) canvas-width)
+        (set! (.-position.y layer) 0))
+
+      :bottom-left
+      (do
+        (set! (.-position.x layer) 0)
+        (set! (.-position.y layer) canvas-height))
+
+      :bottom-right
+      (do
+        (set! (.-position.x layer) canvas-width)
+        (set! (.-position.y layer) canvas-height))
+
+      ;;default
+      (do
+        ;; default layer is centered
+        (set! (.-position.x layer) middle-x)
+        (set! (.-position.y layer) middle-y)))))
 
 
 (defn init
@@ -152,6 +203,9 @@
   :expand        if true makes the canvas take the entire window
   :engine        can be :webgl :canvas or :auto (default :auto)
   :layers        A list of keywords to refer to layers, from bottom to top
+  :origins       A mapping of layer names to their origin positions. Default
+                 position is center. Positions can be :center :top :bottom
+                 :left :right :top-left :top-right :bottom-left :bottom-right
 
   and either:
 
@@ -165,21 +219,21 @@
   :height        height of new canvas
   "
   [opts]
-  (let [{:keys [renderer canvas layer layers stage] :as world}
+  (let [{:keys [renderer canvas layer layers stage
+                origins] :or {origins {}} :as world}
         (into (make opts)
               (make-stage opts))]
     ;; add the stages to the canvas
     (doall
      (map
       (fn [[name layer-obj]]
-        (log "adding to:" (str stage) " layer:" (str layer-obj))
+        ;(log "adding to:" (str stage) " layer:" (str layer-obj))
         (.addChild stage layer-obj)
-        (center-container! canvas layer-obj)
-        )
+        (center-container! canvas layer-obj (or (origins name) :center)))
       layer))
 
     ;; do the first render
-    ;(doall (for [l layers] (.render renderer (l layer))))
+                                        ;(doall (for [l layers] (.render renderer (l layer))))
     (.render renderer stage)
 
     (let [
@@ -194,8 +248,10 @@
                       )
           resize-fn (fn [width height]
                       (.resize renderer width height)
-                      (doall (map (partial center-container! canvas)
-                                  (map second layer))))
+                      (doall (map (fn [[name layer-obj]]
+                                    (center-container! canvas layer-obj
+                                                       (or (origins name) :center)))
+                                  layer)))
           expand-fn (fn [] (resize-fn (.-innerWidth js/window)
                                       (.-innerHeight js/window)))
 
