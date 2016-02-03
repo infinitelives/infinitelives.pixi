@@ -86,7 +86,10 @@
                      {:keys [chars processors]
                       :or {chars default-chars
                            processors []}}]
-  (let [image (-> filename io/file ImageIO/read)
+  (let [image (->> filename
+                   (io/file "resources/public")
+                   ImageIO/read)
+        chars (apply str chars)
         dimensions (char-dimensions image x1 x2 y1 y2 chars)
         final-dims (reduce
                     (fn [acc [func & args]]
