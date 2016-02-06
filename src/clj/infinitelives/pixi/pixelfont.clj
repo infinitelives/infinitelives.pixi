@@ -100,7 +100,7 @@
       ~font-name
       ~(filename->keyword filename)
       ~(vec (for [{:keys [char x1 y1 x2 y2]} final-dims]
-              [char x1 y1 x2 y2])))))
+              [(str char) x1 y1 x2 y2])))))
 
 (comment
   (macroexpand '(pixel-font :test-font "test.png" [127 84] [350 128]
