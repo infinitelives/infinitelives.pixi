@@ -13,7 +13,7 @@
 (defn make-sprite
   "construct a sprite by its texture. optionally pass in other things"
   [texture & {:keys [x y xhandle yhandle scale alpha interactive mousedown
-                     rotation]
+                     rotation tint]
               :or {x 0 y 0
                    xhandle 0.5 yhandle 0.5
                    scale 1
@@ -33,6 +33,7 @@
       (set! (.-alpha s) alpha))
     (when-not (nil? interactive) (set! (.-interactive s) interactive))
     (when-not (nil? mousedown) (set! (.-mousedown s) mousedown))
+    (when-not (nil? tint) (set! (.-tint s) tint))
     s))
 
 (defn set-pos!

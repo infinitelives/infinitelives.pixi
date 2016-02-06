@@ -12,7 +12,7 @@
 
 (defonce canvas
   (c/init {:layers [:bg]
-           :background 0x404040
+           :background 0x404070
            :expand true}))
 
 (defonce main-thread
@@ -22,10 +22,18 @@
     (pf/pixel-font :big "img/fonts.png" [127 84] [500 128]
                    :chars ["ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                            "abcdefghijklmnopqrstuvwxyz"
-                           "0123456789!?#`'.,"])
+                           "0123456789!?#`'.,"]
+                   :kerning {"fo" -2  "ro" -1 "la" -1 })
 
 
     (m/with-sprite canvas :bg
       [text (pf/make-text :big "The quick brown fox jumped over the lazy sequence!"
-                          {"fo" -2  "ro" -1 "la" -1 })]
-      (while true (<! (e/next-frame))))))
+                          :tint 0xb0c0ff
+                          :scale 3
+                          :rotation 0
+                          )]
+      (loop [f 0]
+        (s/set-rotation! text (* 0.002 f))
+        (s/set-scale! text (+ 2 (* 2 (Math/abs (Math/sin (* f 0.02))))))
+        (<! (e/next-frame))
+        (recur (inc f))))))

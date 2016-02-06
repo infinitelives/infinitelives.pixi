@@ -83,9 +83,10 @@
 (def ascii-chars "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~")
 
 (defmacro pixel-font[font-name filename [x1 y1] [x2 y2] &
-                     {:keys [chars processors]
+                     {:keys [chars processors kerning]
                       :or {chars default-chars
-                           processors []}}]
+                           processors []
+                           kerning {}}}]
   (let [image (->> filename
                    (io/file "resources/public")
                    ImageIO/read)
@@ -100,7 +101,8 @@
       ~font-name
       ~(filename->keyword filename)
       ~(vec (for [{:keys [char x1 y1 x2 y2]} final-dims]
-              [(str char) x1 y1 x2 y2])))))
+              [(str char) x1 y1 x2 y2]))
+      ~kerning)))
 
 (comment
   (macroexpand '(pixel-font :test-font "test.png" [127 84] [350 128]
