@@ -19,14 +19,15 @@
   (go
     (<! (r/load-resources canvas :bg ["img/fonts.png"]))
 
-    (pf/pixel-font :big "img/fonts.png" [127 84] [250 128]
+    (pf/pixel-font :big "img/fonts.png" [127 84] [500 128]
                    :chars ["ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                            "abcdefghijklmnopqrstuvwxyz"
                            "0123456789!?#`'.,"])
 
 
     (m/with-sprite canvas :bg
-      [text (pf/make-text :big "TestWordage")]
+      [text (pf/make-text :big "The quick brown fox jumped over the lazy sequence!"
+                          {"fo" -2  "ro" -1 "la" -1 })]
       (while true (<! (e/next-frame)))
       )
 
