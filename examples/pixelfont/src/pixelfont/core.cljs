@@ -28,14 +28,4 @@
     (m/with-sprite canvas :bg
       [text (pf/make-text :big "The quick brown fox jumped over the lazy sequence!"
                           {"fo" -2  "ro" -1 "la" -1 })]
-      (while true (<! (e/next-frame)))
-      )
-
-    ;(t/set-texture! :font (r/get-texture :fonts :nearest))
-
-    #_ (m/with-sprite canvas :bg
-      [rabbit (s/make-sprite :font :xhandle 0.2 :yhandle 0.2 :scale 2)]
-      (loop [angle 0]
-        ;(s/set-rotation! rabbit angle)
-        (<! (e/next-frame))
-        (recur (+ 0.01 angle))))))
+      (while true (<! (e/next-frame))))))
