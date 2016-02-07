@@ -24,16 +24,18 @@
                            size)}]))
            layout))))
 
-(defn make-font [resource-key layout kerning]
+(defn make-font [resource-key layout kerning space]
   {
    :font (make-font-description resource-key layout)
    :texture (r/get-texture resource-key :nearest)
    :kerning kerning
+   :space space
    })
 
 (defn load-pixel-font
-  [pixel-font-name texture-key layout kerning]
-  (swap! pixel-fonts assoc pixel-font-name (make-font texture-key layout kerning)))
+  [pixel-font-name texture-key layout kerning space]
+  (swap! pixel-fonts assoc pixel-font-name
+         (make-font texture-key layout kerning space)))
 
 (defn get-font [font-key]
   (font-key @pixel-fonts))
@@ -55,15 +57,18 @@
             koff ((:kerning font) pair)
             ]
         (if (nil? char)
+          ;; if character is not present in font map, put a space
           (when (seq l)
-            (recur l (+ xp 5) yp c))
+            (recur l (+ xp (:space font)) yp c))
 
           (do
-            ;(let [sp])
+            ;character is present, add the sprite to the container
             (.addChild batch (s/make-sprite texture :x (+ xp koff) :y yp :xhandle 0 :yhandle 0 :tint tint))
             (if (seq l)
               (recur l (+ xp w 1.0 koff) yp c)
               (s/set-pivot! batch (/ (+ xp w koff) 2.0) 0))))))
+
+    ;; set setup details
     (when scale
       (s/set-scale! batch scale))
     (when rotation

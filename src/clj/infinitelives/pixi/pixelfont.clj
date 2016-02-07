@@ -86,7 +86,8 @@
                      {:keys [chars processors kerning]
                       :or {chars default-chars
                            processors []
-                           kerning {}}}]
+                           kerning {}
+                           space 0}}]
   (let [image (->> filename
                    (io/file "resources/public")
                    ImageIO/read)
@@ -102,7 +103,8 @@
       ~(filename->keyword filename)
       ~(vec (for [{:keys [char x1 y1 x2 y2]} final-dims]
               [(str char) x1 y1 x2 y2]))
-      ~kerning)))
+      ~kerning
+      ~space)))
 
 (comment
   (macroexpand '(pixel-font :test-font "test.png" [127 84] [350 128]

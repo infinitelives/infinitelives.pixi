@@ -23,7 +23,8 @@
                    :chars ["ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                            "abcdefghijklmnopqrstuvwxyz"
                            "0123456789!?#`'.,"]
-                   :kerning {"fo" -2  "ro" -1 "la" -1 })
+                   :kerning {"fo" -2  "ro" -1 "la" -1 }
+                   :space 5)
 
 
     (m/with-sprite canvas :bg
