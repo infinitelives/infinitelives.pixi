@@ -150,13 +150,13 @@ uses this font definition to find it's glyphs.
 
 Create a pixel font with:
 
-```
-   (pf/pixel-font :big "img/fonts.png" [127 84] [500 128]
-                  :chars ["ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                          "abcdefghijklmnopqrstuvwxyz"
-                          "0123456789!?#`'.,"]
-                  :kerning {"fo" -2  "ro" -1 "la" -1 }
-                  :space 5)
+```clojure
+(pf/pixel-font :big "img/fonts.png" [127 84] [500 128]
+               :chars ["ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                       "abcdefghijklmnopqrstuvwxyz"
+                       "0123456789!?#`'.,"]
+               :kerning {"fo" -2  "ro" -1 "la" -1 }
+               :space 5)
 ```
 
 The font is given the font-name `:big`, and is built from the img/fonts.png
@@ -169,7 +169,7 @@ to jump for a space character (or any character not found in the font).
 
 You make text from a font just like a sprite:
 
-```
+```clojure
 (m/with-sprite canvas :bg
    [text (pf/make-text :big "The quick brown fox jumped over the lazy sequence!"
                        :tint 0xb0c0ff
