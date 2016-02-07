@@ -164,7 +164,7 @@ spritesheet from position (127, 84) to position (500, 128). The characters
 are laid out as shows in the :chars field. This can either be a single string,
 or a vector. This is just to improve readability, allowing you to put line
 breaks in the character definitions source. Kerning optionally gives a list
-og character pairs that need their distance adjusted. Space is how many pixels
+of character pairs that need their distance adjusted. Space is how many pixels
 to jump for a space character (or any character not found in the font).
 
 You make text from a font just like a sprite:
