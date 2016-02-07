@@ -83,7 +83,7 @@
 (def ascii-chars "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~")
 
 (defmacro pixel-font[font-name filename [x1 y1] [x2 y2] &
-                     {:keys [chars processors kerning]
+                     {:keys [chars processors kerning space]
                       :or {chars default-chars
                            processors []
                            kerning {}
@@ -112,10 +112,7 @@
                                          (offset-dimensions :x2 dec)
                                          (process-row 0 :x1 + 10)
                                          ]
-                            :chars "AB"))
-)
-
-
+                            :chars "AB")))
 
 (comment
   (def a (-> "test.png"
@@ -124,15 +121,7 @@
                                         ;(horizontal-strips 0 200 0 200)
                                         ;(process-line 0 1000 89 96)
 
-
-
-
-
              (char-dimensions 127 350 84 128 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
              (offset-dimensions :x2 dec)
              (process-row 0 :x1 + 10)
-             (process-row 1 :x2 number?))
-
-    )
-
-  )
+             (process-row 1 :x2 number?))))
