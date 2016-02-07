@@ -137,6 +137,48 @@ Now you can use these registered textures in sprites:
       (recur (inc frame))))
 ```
 
+## Pixel Fonts
+
+You can use pixel fonts by rendering all the characters you want to
+use into a spritesheet and then building a font from that section with
+the `pixel-font` macro.
+
+The path to the sprite sheet is specified as a file path relative
+to `resources/public` as the macro analyses the image at compile
+time and calculates all the glyph positions. The client side operation
+uses this font definition to find it's glyphs.
+
+Create a pixel font with:
+
+```
+   (pf/pixel-font :big "img/fonts.png" [127 84] [500 128]
+                  :chars ["ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                          "abcdefghijklmnopqrstuvwxyz"
+                          "0123456789!?#`'.,"]
+                  :kerning {"fo" -2  "ro" -1 "la" -1 }
+                  :space 5)
+```
+
+The font is given the font-name `:big`, and is built from the img/fonts.png
+spritesheet from position (127, 84) to position (500, 128). The characters
+are laid out as shows in the :chars field. This can either be a single string,
+or a vector. This is just to improve readability, allowing you to put line
+breaks in the character definitions source. Kerning optionally gives a list
+og character pairs that need their distance adjusted. Space is how many pixels
+to jump for a space character (or any character not found in the font).
+
+You make text from a font just like a sprite:
+
+```
+(m/with-sprite canvas :bg
+   [text (pf/make-text :big "The quick brown fox jumped over the lazy sequence!"
+                       :tint 0xb0c0ff
+                       :scale 3
+                       :rotation 0)]
+   ... code here ...
+)
+```
+
 ## Complete example
 
 Here is the first intro example to pixi.js:
