@@ -247,6 +247,33 @@
           expand-fn (fn [] (resize-fn (.-innerWidth js/window)
                                       (.-innerHeight js/window)))
 
+          ;; remember: fullscreen call will only work when
+          ;; its called from a gesture. Like an on-click.
+          fullscreen-fn (fn [fullscreen]
+                          (if fullscreen
+                            (cond
+                              (.-requestFullscreen canvas)
+                              (.requestFullscreen canvas)
+
+                              (.-webkitRequestFullscreen canvas)
+                              (.webkitRequestFullscreen canvas)
+
+                              (.-mozRequestFullScreen canvas)
+                              (.mozRequestFullScreen canvas))
+
+                            (cond
+                              (.-exitFullscreen document)
+                              (.exitFullscreen document)
+
+                              (.-webkitExitFullscreen document)
+                              (.webkitExitFullscreen document)
+
+                              (.-msExitFullscreen document)
+                              (.msExitFullscreen document)
+
+                              (.-mozCancelFullScreen document)
+                              (.mozCancelFullScreen document))))
+
           resizer-loop
           (when (:expand opts) (let [c (events/new-resize-chan)]
                                  (go (while true
