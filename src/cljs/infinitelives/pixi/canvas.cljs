@@ -296,3 +296,15 @@
                      :expand-fn expand-fn})]
         (set-default-once! canvas)
         canvas))))
+
+
+(defn add-fullscreen-button! []
+  (let [div (dom/create-element :div)
+        img (dom/create-element :img)
+        ]
+    (dom/append! div img)
+    (set! (.-src img) "/img/fullscreen.png")
+    (set! (.-style img) "bottom: 0; position: absolute; padding-bottom: 20px; padding-left: 20px;")
+
+    )
+)
