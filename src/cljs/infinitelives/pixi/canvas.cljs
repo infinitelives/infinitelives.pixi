@@ -262,17 +262,17 @@
                               (.mozRequestFullScreen canvas))
 
                             (cond
-                              (.-exitFullscreen document)
-                              (.exitFullscreen document)
+                              (.-exitFullscreen js/document)
+                              (.exitFullscreen js/document)
 
-                              (.-webkitExitFullscreen document)
-                              (.webkitExitFullscreen document)
+                              (.-webkitExitFullscreen js/document)
+                              (.webkitExitFullscreen js/document)
 
-                              (.-msExitFullscreen document)
-                              (.msExitFullscreen document)
+                              (.-msExitFullscreen js/document)
+                              (.msExitFullscreen js/document)
 
-                              (.-mozCancelFullScreen document)
-                              (.mozCancelFullScreen document))))
+                              (.-mozCancelFullScreen js/document)
+                              (.mozCancelFullScreen js/document))))
 
           resizer-loop
           (when (:expand opts) (let [c (events/new-resize-chan)]
@@ -288,23 +288,30 @@
 
       (render)
 
+      (fullscreen-fn)
+
       (let [canvas (into
                     world
                     {
                      :render-fn render-fn
                      :resize-fn resize-fn
+                     :fullscreen-fn fullscreen-fn
                      :expand-fn expand-fn})]
         (set-default-once! canvas)
         canvas))))
 
-
-(defn add-fullscreen-button! []
+(defn add-fullscreen-button! [{:keys [fullscreen-fn]}]
   (let [div (dom/create-element :div)
         img (dom/create-element :img)
         ]
     (dom/append! div img)
-    (set! (.-src img) "/img/fullscreen.png")
-    (set! (.-style img) "bottom: 0; position: absolute; padding-bottom: 20px; padding-left: 20px;")
-
-    )
-)
+    (set! (.-src img) "https://cdn0.iconfinder.com/data/icons/cosmo-player/40/window_fullscreen_1-512.png")
+    (.setAttribute img "style" "bottom: 0; position: absolute; padding-bottom: 20px; padding-left: 20px; z-index: 200; width: 64; height: 64; background-color: blue;")
+    (.setAttribute div "style" "bottom: 0; position: absolute; padding-bottom: 20px; padding-left: 20px; z-index: 200; width: 64; height: 64; background-color: red;")
+    (.addEventListener img "click" #(fullscreen-fn true))
+    (log "!" (.-body js/document))
+    (dom/append! (.-body js/document) div)
+    (log div)
+    (set! (.-style img) "bottom: 0; position: absolute; padding-bottom: 20px; padding-left: 20px; z-index: -200; width: 64; height: 64;")
+    div
+    ))
