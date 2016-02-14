@@ -302,16 +302,12 @@
 
 (defn add-fullscreen-button! [{:keys [fullscreen-fn]}]
   (let [div (dom/create-element :div)
-        img (dom/create-element :img)
-        ]
+        img (dom/create-element :img)]
     (dom/append! div img)
-    (set! (.-src img) "https://cdn0.iconfinder.com/data/icons/cosmo-player/40/window_fullscreen_1-512.png")
-    (.setAttribute img "style" "bottom: 0; position: absolute; padding-bottom: 20px; padding-left: 20px; z-index: 200; width: 64; height: 64; background-color: blue;")
-    (.setAttribute div "style" "bottom: 0; position: absolute; padding-bottom: 20px; padding-left: 20px; z-index: 200; width: 64; height: 64; background-color: red;")
+    (set! (.-src img) "http://runrunitshim.com/images/fullscreenIcon.png")
+    (.setAttribute img "style" "bottom: 0; position: absolute; padding-bottom: 20px; padding-left: 20px; z-index: 200;")
+    (.setAttribute div "style" "bottom: 0; position: absolute; padding-bottom: 0px; padding-left: 0px; z-index: 200;")
     (.addEventListener img "click" #(fullscreen-fn true))
-    (log "!" (.-body js/document))
     (dom/append! (.-body js/document) div)
-    (log div)
-    (set! (.-style img) "bottom: 0; position: absolute; padding-bottom: 20px; padding-left: 20px; z-index: -200; width: 64; height: 64;")
     div
     ))
