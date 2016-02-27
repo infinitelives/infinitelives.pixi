@@ -1,5 +1,6 @@
 # infinitelives.pixi
-2D Game functionality that depends apon pixi.js. Uses Pixi via cljsjs package.
+
+A 2D ClojureScript Game Engine. For building webgames. It's not really an engine, it's just a library. Just a bunch of 2D Game functionality that depends apon pixi.js. Pixi.js comes bundled (via cljsjs dependency package).
 
 ## Setup
 
