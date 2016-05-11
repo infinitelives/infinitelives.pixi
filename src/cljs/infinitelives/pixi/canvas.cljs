@@ -52,13 +52,13 @@
   :width         width of new canvas
   :height        height of new canvas"
   [{:keys [expand x y width height canvas engine background]
-      :or {expand false
-           x 0
-           y 0
-           width 800
-           height 600
-           background 0x500000
-           engine :auto}}]
+    :or {expand false
+         x 0
+         y 0
+         width 800
+         height 600
+         background 0x500000
+         engine :auto}}]
   (let [fswidth (.-innerWidth js/window)
         fsheight (.-innerHeight js/window)
 
@@ -92,9 +92,9 @@
       ;; and add it to the DOM
       (do
         (dom/set-style! actual-canvas
-                          :left (if expand 0 x)
-                          :top (if expand 0 y)
-                          :position "absolute")
+                        :left (if expand 0 x)
+                        :top (if expand 0 y)
+                        :position "absolute")
         (dom/append! (.-body js/document) actual-canvas)))
 
     (let [wind-width (if expand fswidth canvas-width)
@@ -220,14 +220,14 @@
   "
   [opts]
   (let [{:keys [renderer canvas layer layers stage
-                origins] :or {origins {}} :as world}
+                origins fullscreen-button] :or {origins {}} :as world}
         (into (make opts)
               (make-stage opts))]
     ;; add the stages to the canvas
     (doall
      (map
       (fn [[name layer-obj]]
-        ;(log "adding to:" (str stage) " layer:" (str layer-obj))
+                                        ;(log "adding to:" (str stage) " layer:" (str layer-obj))
         (.addChild stage layer-obj)
         (center-container! canvas layer-obj (or (origins name) :center)))
       layer))
