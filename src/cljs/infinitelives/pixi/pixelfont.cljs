@@ -40,7 +40,8 @@
 (defn get-font [font-key]
   (font-key @pixel-fonts))
 
-(defn make-text [font-key text & {:keys [tint scale anchor rotation]}]
+(defn make-text [font-key text & {:keys [tint scale anchor rotation
+                                         x y visible]}]
   (let [font (get-font font-key)
         batch
         (if tint
@@ -72,9 +73,15 @@
     (when scale
       (s/set-scale! batch scale))
     (when rotation
-      (s/set-rotation! batch scale))
+      (s/set-rotation! batch rotation))
     (when anchor
       (s/set-anchor! batch (anchor 0) (anchor 1)))
+    (when x
+      (s/set-x! batch x))
+    (when y
+      (s/set-y! batch y))
+    (when-not (nil? visible)
+      (s/set-visible! batch visible))
     batch))
 
 (comment
