@@ -51,6 +51,12 @@
      (set-pos! sprite (pos 0) (pos 1))
      (set-pos! sprite (aget pos 0) (aget pos 1)))))
 
+(defn set-x! [sprite x]
+  (set! (.-x sprite) x))
+
+(defn set-y! [sprite y]
+  (set! (.-y sprite) y))
+
 (defn set-anchor! [sprite x y]
   (set! (.-anchor sprite) (make-point x y)))
 
