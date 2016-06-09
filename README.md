@@ -1,5 +1,7 @@
 # infinitelives.pixi
 
+[![Clojars Project](https://img.shields.io/clojars/v/infinitelives/infinitelives.pixi.svg)](https://clojars.org/infinitelives/infinitelives.pixi)
+
 A 2D ClojureScript Game Engine. For building webgames. It's not really an engine, it's just a library. Just a bunch of 2D Game functionality that depends apon pixi.js. Pixi.js comes bundled (via cljsjs dependency package).
 
 A complete example game:  https://github.com/retrogradeorbit/moonhenge
