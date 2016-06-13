@@ -13,14 +13,19 @@
 (defn make-sprite
   "construct a sprite by its texture. optionally pass in other things"
   [texture & {:keys [x y xhandle yhandle scale alpha interactive mousedown
-                     rotation visible]
+                     rotation tint tiling tiling-width tiling-height visible]
               :or {x 0 y 0
                    xhandle 0.5 yhandle 0.5
                    scale 1
                    alpha 1
                    rotation 0
-                   visible true}}]
-  (let [s (js/PIXI.Sprite. (if (keyword? texture) (texture/get texture) texture))]
+                   tiling false}}]
+  (let [s (if tiling
+            (js/PIXI.extras.TilingSprite.
+             (if (keyword? texture) (texture/get texture) texture)
+             tiling-width tiling-height)
+            (js/PIXI.Sprite. (if (keyword? texture) (texture/get texture) texture)))]
+    (assert s "creation of sprite failed and returned nil")
     (set! (.-anchor s) (make-point xhandle yhandle))
     (set! (.-x s) x)
     (set! (.-y s) y)
@@ -35,6 +40,7 @@
       (set! (.-alpha s) alpha))
     (when-not (nil? interactive) (set! (.-interactive s) interactive))
     (when-not (nil? mousedown) (set! (.-mousedown s) mousedown))
+    (when-not (nil? tint) (set! (.-tint s) tint))
     s))
 
 (defn set-pos!
@@ -45,6 +51,12 @@
    (if (vector? pos)
      (set-pos! sprite (pos 0) (pos 1))
      (set-pos! sprite (aget pos 0) (aget pos 1)))))
+
+(defn set-x! [sprite x]
+  (set! (.-x sprite) x))
+
+(defn set-y! [sprite y]
+  (set! (.-y sprite) y))
 
 (defn set-anchor! [sprite x y]
   (set! (.-anchor sprite) (make-point x y)))

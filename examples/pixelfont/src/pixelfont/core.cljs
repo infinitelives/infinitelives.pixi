@@ -1,17 +1,40 @@
 (ns pixelfont.core
-  (:require ))
+  (:require [infinitelives.pixi.canvas :as c]
+            [infinitelives.pixi.events :as e]
+            [infinitelives.pixi.resources :as r]
+            [infinitelives.pixi.texture :as t]
+            [infinitelives.pixi.sprite :as s]
+            [infinitelives.pixi.pixelfont :as pf]
+            [cljs.core.async :refer [<!]])
+  (:require-macros [cljs.core.async.macros :refer [go]]
+                   [infinitelives.pixi.macros :as m]
+                   [infinitelives.pixi.pixelfont :as pf]))
 
-(enable-console-print!)
+(defonce canvas
+  (c/init {:layers [:bg]
+           :background 0x404070
+           :expand true}))
 
-(println "Edits to this text should show up in your developer console.")
+(defonce main-thread
+  (go
+    (<! (r/load-resources canvas :bg ["img/fonts.png"]))
 
-;; define your app data so that it doesn't get over-written on reload
+    (pf/pixel-font :big "img/fonts.png" [127 84] [500 128]
+                   :chars ["ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                           "abcdefghijklmnopqrstuvwxyz"
+                           "0123456789!?#`'.,"]
+                   :kerning {"fo" -2  "ro" -1 "la" -1 }
+                   :space 5)
 
-(defonce app-state (atom {:text "Hello world!"}))
 
-
-(defn on-js-reload []
-  ;; optionally touch your app-state to force rerendering depending on
-  ;; your application
-  ;; (swap! app-state update-in [:__figwheel_counter] inc)
-)
+    (m/with-sprite canvas :bg
+      [text (pf/make-text :big "The quick brown fox jumped over the lazy sequence!"
+                          :tint 0xb0c0ff
+                          :scale 3
+                          :rotation 0
+                          )]
+      (loop [f 0]
+        (s/set-rotation! text (* 0.002 f))
+        (s/set-scale! text (+ 2 (* 2 (Math/abs (Math/sin (* f 0.02))))))
+        (<! (e/next-frame))
+        (recur (inc f))))))

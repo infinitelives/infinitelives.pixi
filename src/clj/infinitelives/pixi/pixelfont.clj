@@ -83,10 +83,15 @@
 (def ascii-chars "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~")
 
 (defmacro pixel-font[font-name filename [x1 y1] [x2 y2] &
-                     {:keys [chars processors]
+                     {:keys [chars processors kerning space]
                       :or {chars default-chars
-                           processors []}}]
-  (let [image (-> filename io/file ImageIO/read)
+                           processors []
+                           kerning {}
+                           space 0}}]
+  (let [image (->> filename
+                   (io/file "resources/public")
+                   ImageIO/read)
+        chars (apply str chars)
         dimensions (char-dimensions image x1 x2 y1 y2 chars)
         final-dims (reduce
                     (fn [acc [func & args]]
@@ -97,7 +102,9 @@
       ~font-name
       ~(filename->keyword filename)
       ~(vec (for [{:keys [char x1 y1 x2 y2]} final-dims]
-              [char x1 y1 x2 y2])))))
+              [(str char) x1 y1 x2 y2]))
+      ~kerning
+      ~space)))
 
 (comment
   (macroexpand '(pixel-font :test-font "test.png" [127 84] [350 128]
@@ -105,10 +112,7 @@
                                          (offset-dimensions :x2 dec)
                                          (process-row 0 :x1 + 10)
                                          ]
-                            :chars "AB"))
-)
-
-
+                            :chars "AB")))
 
 (comment
   (def a (-> "test.png"
@@ -117,15 +121,7 @@
                                         ;(horizontal-strips 0 200 0 200)
                                         ;(process-line 0 1000 89 96)
 
-
-
-
-
              (char-dimensions 127 350 84 128 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
              (offset-dimensions :x2 dec)
              (process-row 0 :x1 + 10)
-             (process-row 1 :x2 number?))
-
-    )
-
-  )
+             (process-row 1 :x2 number?))))
