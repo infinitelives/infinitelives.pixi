@@ -3,18 +3,12 @@
 
 ## Setup
 
-Infinitelives is not ready for clojars. And so to use it, you need to install it. This involves checking the clojure source out. Then issuing `lein install` in their root.
-
-Before installing infinitelives.pixi, you will need to install infinitelives.utils. Check out the infinitelives.utils source and `lein install`. Then repeat again with the infinitelives.pixi source. Then you are ready to use in your project.
-
-## Starting a project
-
 To start a standalone, client-side only game, a good basis is the figwheel template. `lein new figwheel myproj`.
 
-To use the installed libraries, add the following to dependencies in project.clj:
+Add the following to the dependencies section of your `project.clj` file:
 
 ```clojure
-[infinitelives.pixi/infinitelives.pixi "0.1.0-SNAPSHOT"]
+[infinitelives/infinitelives.pixi "0.1.0"]
 ```
 
 ## Initialising a canvas
