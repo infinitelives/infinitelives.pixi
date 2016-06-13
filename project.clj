@@ -1,4 +1,4 @@
-(defproject infinitelives/infinitelives.pixi "0.1.0-SNAPSHOT"
+(defproject infinitelives/infinitelives.pixi "0.1.0"
   :description "2D pixi library for rapidly developing games in clojurescript"
   :url "https://github.com/infinitelives/infinitelives.pixi"
   :license {:name "Eclipse Public License"
@@ -8,7 +8,7 @@
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
 
                  ;; depend on utils
-                 [infinitelives/infinitelives.utils "0.1.0-SNAPSHOT"]
+                 [infinitelives/infinitelives.utils "0.1.0"]
 
                  ;; we need pixi
                  [cljsjs/pixi "3.0.7-0"]
