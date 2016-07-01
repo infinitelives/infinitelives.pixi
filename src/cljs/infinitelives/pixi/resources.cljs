@@ -12,6 +12,7 @@
 ;; where we store all the loaded textures keyed by name
 (defonce !textures (atom {}))
 
+
 (defn progress-texture
   "Draws an empty box that can serve as a default progress bar for preloading images"
   [fraction {:keys [empty-colour full-colour
@@ -108,49 +109,9 @@
     (set! (.-src i) url)
     c))
 
-(defmethod resources/load "png" [url] (register! url))
-(defmethod resources/load "gif" [url] (register! url))
-(defmethod resources/load "jpg" [url] (register! url))
-
-
-(defn load-urls
-  "loads each url in the passed in list as an image. Updates the progress
-as it goes with
-  a percentage and a thumbnail. Once complete, displays all the images
-fullsize."
-  [urls progress-bar & options]
-  (let [options (into {} options)]
-    (let [finished (chan)                         ;; make our channel to
-          num-urls (count urls)                   ;; how many urls
-          images (doall                           ;; start loading all the urls
-                  (map (fn [src]
-                         (case (identify-file src)
-                           :image
-                           (load-image src finished)
-
-                           :sound
-                           (load-sound src finished)
-
-                           :unknown
-                           (load-image src finished)
-                           ))
-                       urls))]
-      (go
-        (loop [i 1]
-          (let [[url img] (<! finished)] ;; a new image has finished loading
-            (when (:debug-delay options)
-              (<! (timeout (* (:debug-delay options) 1000)))) ;; artificial random delay (up to 1 ec)
-
-            ;; setup a pixi texture keyed by the tail of its filename
-            (register url img)
-
-            ;; update progress bar and add image
-            (set! (.-texture progress-bar)
-                         (progress-texture (/ i num-urls) options))
-
-            ;; more images?
-            (when (< i num-urls)
-              (recur (inc i)))))))))
+(defmethod resources/load "png" [url] (load url))
+(defmethod resources/load "gif" [url] (load url))
+(defmethod resources/load "jpg" [url] (load url))
 
 (defn fadeout [spr & {:keys [duration start end]
                         :or {duration 1 start nil end 0}}]
@@ -183,7 +144,12 @@ fullsize."
       (<! (fadein b :duration fade-in))
 
       ;; show load progress
-      (<! (apply (partial load-urls urls b) options))
+      (<! (apply
+           (partial resources/load-urls urls
+                    (fn [i num-urls url obj]
+                      (set! (.-texture b)
+                            (progress-texture (/ i num-urls) options))))
+           options))
 
       ;; load is done. return message
       ;(>! c true)
