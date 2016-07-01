@@ -1,4 +1,4 @@
-(defproject infinitelives/infinitelives.pixi "0.1.0"
+(defproject infinitelives/infinitelives.pixi "0.1.1-SNAPSHOT"
   :description "2D pixi library for rapidly developing games in clojurescript"
   :url "https://github.com/infinitelives/infinitelives.pixi"
   :license {:name "Eclipse Public License"
