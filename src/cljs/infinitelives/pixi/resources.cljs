@@ -4,6 +4,7 @@
             [infinitelives.utils.string :as string]
             [infinitelives.utils.sound :as sound]
             [infinitelives.utils.events :as events]
+            [infinitelives.utils.resources :as resources]
             [infinitelives.utils.console :refer [log]]
             [cljs.core.async :refer [chan put! <! timeout close!]])
   (:require-macros [cljs.core.async.macros :refer [go]]))
