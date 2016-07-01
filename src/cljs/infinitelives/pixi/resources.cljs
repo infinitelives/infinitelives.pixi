@@ -77,52 +77,40 @@
   (scale (get @!textures key)))
 
 ;; setup a pixi texture keyed by the tail of its filename
-(defn- register-texture!
+(defn- register!
   [url img]
-  (when (string/ends-with? url ".png")
-    (swap! !textures
-           assoc (string/url-keyword url)
-           {
-            :linear
-            (js/PIXI.Texture.fromImage
-             url true (aget js/PIXI.scaleModes "LINEAR"))
+  (swap! !textures
+         assoc (string/url-keyword url)
+         {
+          :linear
+          (js/PIXI.Texture.fromImage
+           url true (aget js/PIXI.scaleModes "LINEAR"))
 
-            ;; this is a hack adding # to the tail of a url so pixi doesnt use the other
-            ;; linear version
-            ;; SEE: https://github.com/GoodBoyDigital/pixi.js/issues/1724
-            :nearest
-            (js/PIXI.Texture.fromImage
-             (str url "#") true (aget js/PIXI.scaleModes "NEAREST"))})))
+          ;; this is a hack adding # to the tail of a url so pixi doesnt use the other
+          ;; linear version
+          ;; SEE: https://github.com/GoodBoyDigital/pixi.js/issues/1724
+          :nearest
+          (js/PIXI.Texture.fromImage
+           (str url "#") true (aget js/PIXI.scaleModes "NEAREST"))}))
 
-(defn- identify-file [url]
-  (condp #(%1 %2) (string/get-extension url)
-    #{"ogg" "mp3" "wav"} :sound
-    #{"png" "jpg" "gif"} :image
-    :unknown))
+(defmethod resources/register! "png" [url img] (register! url img))
+(defmethod resources/register! "gif" [url img] (register! url img))
+(defmethod resources/register! "jpg" [url img] (register! url img))
 
-(defn register
-  [url obj]
-  (case (identify-file url)
-    :image
-    (register-texture! url obj)
 
-    :sound
-    (sound/register-sound! url obj)
-
-    :default
-    ))
-
-(defn- load-image [url finished]
-  (let [i (js/Image.)]
-    (set! (.-onload i) #(put! finished [url i]))
-    (set! (.-onerror i) #(put! finished [url nil]))
+(defn load [url]
+  (let [c (chan)
+        i (js/Image.)]
+    (set! (.-onload i) #(put! c [url i]))
+    (set! (.-onerror i) #(put! c [url nil]))
     (set! (.-onabort i) #(js/alert "abort"))
     (set! (.-src i) url)
-    i))
+    c))
 
-(defn- load-sound [url finished]
-  (go
-    (put! finished [url (<! (sound/load-sound url))])))
+(defmethod resources/load "png" [url] (register! url))
+(defmethod resources/load "gif" [url] (register! url))
+(defmethod resources/load "jpg" [url] (register! url))
+
 
 (defn load-urls
   "loads each url in the passed in list as an image. Updates the progress
