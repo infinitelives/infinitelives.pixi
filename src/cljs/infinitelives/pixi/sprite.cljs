@@ -78,7 +78,7 @@
 
 (defn set-texture! [sprite tex]
   (if (keyword? tex)
-    (set! (.-texture sprite) (texture/get tex))
+    (set! (.-texture sprite) (texture/get-texture tex))
     (set! (.-texture sprite) tex)))
 
 (defn set-visible! [sprite visibility]
