@@ -22,9 +22,9 @@
                    tiling false}}]
   (let [s (if tiling
             (js/PIXI.extras.TilingSprite.
-             (if (keyword? texture) (texture/get texture) texture)
+             (if (keyword? texture) (texture/get-texture texture) texture)
              tiling-width tiling-height)
-            (js/PIXI.Sprite. (if (keyword? texture) (texture/get texture) texture)))]
+            (js/PIXI.Sprite. (if (keyword? texture) (texture/get-texture texture) texture)))]
     (assert s "creation of sprite failed and returned nil")
     (set! (.-anchor s) (make-point xhandle yhandle))
     (set! (.-x s) x)

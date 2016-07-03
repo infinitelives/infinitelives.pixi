@@ -15,9 +15,11 @@
   ([key]
    (swap! texture-store dissoc key)))
 
-(defn get
+(defn get-texture
   [key]
-  (@texture-store key))
+  (or
+   (@texture-store key)
+   (throw (js/Error. (str "Texture " texture " not loaded")))))
 
 (defn set-texture!
   [key texture]
