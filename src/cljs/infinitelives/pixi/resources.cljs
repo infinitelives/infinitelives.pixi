@@ -9,9 +9,13 @@
             [cljs.core.async :refer [chan put! <! timeout close!]])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
-;; where we store all the loaded textures keyed by name
-(defonce !textures (atom {}))
-
+;; where we store all the loaded full textures keyed by name
+;; The textures stored here are the full loaded image. Sub textures
+;; as used in sprites are stored in the texture/texture-store atom.
+;; This resources/texture-store atom stores the raw resource images.
+;; each value is a hashmap with keps :linear and :nearest containing
+;; textures set to those filtering modes
+(defonce texture-store (atom {}))
 
 (defn progress-texture
   "Draws an empty box that can serve as a default progress bar for preloading images"
@@ -76,12 +80,12 @@
     s))
 
 (defn get-texture [key scale]
-  (scale (get @!textures key)))
+  (scale (get @texture-store key)))
 
 ;; setup a pixi texture keyed by the tail of its filename
 (defn- register!
   [url img]
-  (swap! !textures
+  (swap! texture-store
          assoc (string/url-keyword url)
          {
           :linear
