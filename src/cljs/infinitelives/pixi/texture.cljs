@@ -1,30 +1,30 @@
 (ns infinitelives.pixi.texture
   (:require [cljsjs.pixi]))
 
-(defonce texture-store (atom {}))
+(defonce !texture-store (atom {}))
 
 (defn assoc!
   "Add a texture object to the texture cache under
   the key `key`"
   [key texture]
-  (swap! texture-store assoc key texture))
+  (swap! !texture-store assoc key texture))
 
 (defn dissoc!
   "Remove the texture keyed as `key` from the
   texture cache"
   [key]
-  (swap! texture-store dissoc key))
+  (swap! !texture-store dissoc key))
 
 (defn empty!
   "Empty the texture cache of all its textures"
   []
-  (reset! texture-store {}))
+  (reset! !texture-store {}))
 
 (defn get-texture
   "Get a texture from the cache by `key`"
   [key]
   (or
-   (@texture-store key)
+   (@!texture-store key)
    (throw (js/Error. (str "Texture " texture " not loaded")))))
 
 (defn sub-texture [texture [x y] [w h]]
@@ -44,5 +44,5 @@
   }
   "
   [texture asset-description]
-  (swap! texture-store into (for [[key {:keys [pos size]}] asset-description]
+  (swap! !texture-store into (for [[key {:keys [pos size]}] asset-description]
                               [key (sub-texture texture pos size)])))
