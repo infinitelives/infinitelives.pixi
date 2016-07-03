@@ -15,7 +15,7 @@
 ;; This resources/texture-store atom stores the raw resource images.
 ;; each value is a hashmap with keps :linear and :nearest containing
 ;; textures set to those filtering modes
-(defonce texture-store (atom {}))
+(defonce !texture-store (atom {}))
 
 (defn progress-texture
   "Draws an empty box that can serve as a default progress bar for preloading images"
@@ -80,12 +80,12 @@
     s))
 
 (defn get-texture [key scale]
-  (scale (get @texture-store key)))
+  (scale (get @!texture-store key)))
 
 ;; setup a pixi texture keyed by the tail of its filename
 (defn- register!
   [url img]
-  (swap! texture-store
+  (swap! !texture-store
          assoc (string/url-keyword url)
          {
           :linear
