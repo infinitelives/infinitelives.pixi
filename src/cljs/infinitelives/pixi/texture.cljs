@@ -25,7 +25,7 @@
   [key]
   (or
    (@!texture-store key)
-   (throw (js/Error. (str "Texture " texture " not loaded")))))
+   (throw (js/Error. (str "Texture " key " not loaded")))))
 
 (defn sub-texture [texture [x y] [w h]]
   (js/PIXI.Texture. texture (js/PIXI.Rectangle. x y w h)))
