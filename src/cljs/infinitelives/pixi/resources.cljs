@@ -6,7 +6,7 @@
             [infinitelives.utils.events :as events]
             [infinitelives.utils.resources :as resources]
             [infinitelives.utils.console :refer [log]]
-            [cljs.core.async :refer [chan put! <! timeout close!]])
+            [cljs.core.async :refer [chan put! <! >! timeout close!]])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 ;; where we store all the loaded full textures keyed by name
@@ -140,32 +140,22 @@
 (defn load-resources [canvas layer urls & {:keys [fade-in fade-out]
                       :or {fade-in 0.5 fade-out 0.5}
                       :as options}]
-  ;(log "!")
-  (let [c (chan)
-        b (add-prog-bar (-> canvas :layer layer) options)]
+  (let [b (add-prog-bar (-> canvas :layer layer) options)]
     (go
       ;; fade in
       (<! (fadein b :duration fade-in))
 
-      ;; show load progress
-      (<! (apply
-           (partial resources/load-urls urls
-                    (fn [i num-urls url obj]
-                      (set! (.-texture b)
-                            (progress-texture (/ i num-urls) options))))
-           options))
+      ;; load urls and show progress
+      (let [coll (<! (resources/load-urls urls
+                      (fn [i num-urls url obj]
+                        (set! (.-texture b)
+                              (progress-texture (/ i num-urls) options)))))]
 
-      ;; load is done. return message
-      ;(>! c true)
+        ;; fadeout
+        (<! (fadeout b :duration fade-out))
 
-      ;; delay a tiny bit
-      (<! (timeout 300))
+        ;; remove progress bar sprite
+        (.removeChild (-> canvas :layer layer) b)
 
-      ;; fadeout
-      (<! (fadeout b :duration fade-out))
-
-      ;; remove progress bar sprite
-      (.removeChild (-> canvas :layer layer) b)
-
-      (close! c))
-    c))
+        ;; return collection or urls -> resources
+        coll))))
