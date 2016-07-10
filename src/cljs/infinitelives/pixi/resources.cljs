@@ -82,22 +82,23 @@
 (defn get-texture [key scale]
   (scale (get @!texture-store key)))
 
-;; setup a pixi texture keyed by the tail of its filename
+;; setup a pixi texture cache keyed by the tail of its filename
 (defn- register!
   [url img]
-  (swap! !texture-store
-         assoc (string/url-keyword url)
-         {
-          :linear
-          (js/PIXI.Texture.fromImage
-           url true (aget js/PIXI.scaleModes "LINEAR"))
+  (let [linear (js/PIXI.Texture.fromImage
+                url true (aget js/PIXI.scaleModes "LINEAR"))
 
-          ;; this is a hack adding # to the tail of a url so pixi doesnt use the other
-          ;; linear version
-          ;; SEE: https://github.com/GoodBoyDigital/pixi.js/issues/1724
-          :nearest
-          (js/PIXI.Texture.fromImage
-           (str url "#") true (aget js/PIXI.scaleModes "NEAREST"))}))
+        ;; this is a hack adding # to the tail of a url so pixi doesnt use the other
+        ;; linear version
+        ;; SEE: https://github.com/GoodBoyDigital/pixi.js/issues/1724
+        nearest (js/PIXI.Texture.fromImage
+                 (str url "#") true (aget js/PIXI.scaleModes "NEAREST"))
+
+        textures {:linear linear
+                  :nearest nearest
+                  :image img}]
+    (swap! !texture-store assoc (string/url-keyword url) textures)
+    textures))
 
 (defmethod resources/register! "png" [url img] (register! url img))
 (defmethod resources/register! "gif" [url img] (register! url img))
