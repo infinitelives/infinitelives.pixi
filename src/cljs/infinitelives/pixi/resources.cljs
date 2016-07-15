@@ -84,34 +84,28 @@
 
 ;; setup a pixi texture cache keyed by the tail of its filename
 (defn- register!
-  [url img]
-  (let [linear (js/PIXI.Texture.fromImage
-                url true (aget js/PIXI.scaleModes "LINEAR"))
+  [url texture-hash]
+  (log "register!" url texture-hash)
+  (swap! !texture-store assoc (string/url-keyword url) texture-hash)
+  texture-hash)
 
-        ;; this is a hack adding # to the tail of a url so pixi doesnt use the other
-        ;; linear version
-        ;; SEE: https://github.com/GoodBoyDigital/pixi.js/issues/1724
-        nearest (js/PIXI.Texture.fromImage
-                 url)
-                 ;(str url "#") true (aget js/PIXI.scaleModes "NEAREST")
-
-
-        textures {:linear linear
-                  :nearest nearest
-                  :image img}]
-    (set! (.-scaleMode url) js/PIXI.SCALE_MODES.NEAREST)
-    (swap! !texture-store assoc (string/url-keyword url) textures)
-    textures))
-
-(defmethod resources/register! "png" [url img] (register! url img))
-(defmethod resources/register! "gif" [url img] (register! url img))
-(defmethod resources/register! "jpg" [url img] (register! url img))
+(defmethod resources/register! "png" [url texture-hash] (register! url texture-hash))
+(defmethod resources/register! "gif" [url texture-hash] (register! url texture-hash))
+(defmethod resources/register! "jpg" [url texture-hash] (register! url texture-hash))
 
 
 (defn load [url]
   (let [c (chan)
         i (js/Image.)]
-    (set! (.-onload i) #(put! c [url i]))
+    (set! (.-crossOrigin i) "")
+    (set! (.-onload i)
+          #(put! c [url
+                    {:linear (js/PIXI.Texture.
+                              (js/PIXI.BaseTexture. i js/PIXI.SCALE_MODES.LINEAR))
+                     :nearest (js/PIXI.Texture.
+                               (js/PIXI.BaseTexture. i js/PIXI.SCALE_MODES.NEAREST))
+                     :image i}
+                    ]))
     (set! (.-onerror i) #(put! c [url nil]))
     (set! (.-onabort i) #(js/alert "abort"))
     (set! (.-src i) url)
