@@ -92,11 +92,14 @@
         ;; linear version
         ;; SEE: https://github.com/GoodBoyDigital/pixi.js/issues/1724
         nearest (js/PIXI.Texture.fromImage
-                 (str url "#") true (aget js/PIXI.scaleModes "NEAREST"))
+                 url)
+                 ;(str url "#") true (aget js/PIXI.scaleModes "NEAREST")
+
 
         textures {:linear linear
                   :nearest nearest
                   :image img}]
+    (set! (.-scaleMode url) js/PIXI.SCALE_MODES.NEAREST)
     (swap! !texture-store assoc (string/url-keyword url) textures)
     textures))
 
