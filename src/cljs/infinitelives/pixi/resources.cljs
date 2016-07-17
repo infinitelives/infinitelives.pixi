@@ -85,7 +85,6 @@
 ;; setup a pixi texture cache keyed by the tail of its filename
 (defn- register!
   [url texture-hash]
-  (log "register!" url texture-hash)
   (swap! !texture-store assoc (string/url-keyword url) texture-hash)
   texture-hash)
 
@@ -96,19 +95,21 @@
 
 (defn load [url]
   (let [c (chan)
-        i (js/Image.)]
-    (set! (.-crossOrigin i) "")
-    (set! (.-onload i)
+        img (js/Image.)]
+    (set! (.-crossOrigin img) "")
+    (set! (.-onload img)
           #(put! c [url
                     {:linear (js/PIXI.Texture.
-                              (js/PIXI.BaseTexture. i js/PIXI.SCALE_MODES.LINEAR))
+                              (js/PIXI.BaseTexture. img js/PIXI.SCALE_MODES.LINEAR))
                      :nearest (js/PIXI.Texture.
-                               (js/PIXI.BaseTexture. i js/PIXI.SCALE_MODES.NEAREST))
-                     :image i}
+                               (js/PIXI.BaseTexture. img js/PIXI.SCALE_MODES.NEAREST))
+                     :image img}
                     ]))
-    (set! (.-onerror i) #(put! c [url nil]))
-    (set! (.-onabort i) #(js/alert "abort"))
-    (set! (.-src i) url)
+    (set! (.-onerror img) #(put! c [url nil]))
+    (set! (.-onabort img) #(js/alert "abort"))
+
+    ;; trigger load
+    (set! (.-src img) url)
     c))
 
 (defmethod resources/load "png" [url] (load url))
