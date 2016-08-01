@@ -20,9 +20,9 @@
   (if (pos? (count bindings))
     (let [symb (first bindings) val (second bindings)]
       `(let [~symb ~val]
-         (.addChild (get-layer ~canvas ~layer) ~symb)
-         (with-sprite ~canvas ~layer ~(subvec bindings 2) ~@body)
-         (.removeChild (get-layer ~canvas ~layer) ~symb)))
+         (try (.addChild (get-layer ~canvas ~layer) ~symb)
+              (with-sprite ~canvas ~layer ~(subvec bindings 2) ~@body)
+              (finally (.removeChild (get-layer ~canvas ~layer) ~symb)))))
     `(do ~@body)))
 
 (defmacro with-layered-sprite [bindings & body]
@@ -36,13 +36,13 @@
           val (nth bindings 2)]
       `(let [~symb ~val
              canvas# (infinitelives.pixi.canvas/get)]
-         (.addChild
-          (get-layer canvas# ~layer)
-          ~symb)
-         (with-layered-sprite ~(subvec bindings 3) ~@body)
-         (.removeChild
-          (get-layer canvas# ~layer)
-          ~symb)))
+         (try (.addChild
+               (get-layer canvas# ~layer)
+               ~symb)
+              (with-layered-sprite ~(subvec bindings 3) ~@body)
+              (finally (.removeChild
+                        (get-layer canvas# ~layer)
+                        ~symb)))))
     `(do ~@body)))
 
 (defmacro with-sprite-set [canvas layer bindings & body]
@@ -53,11 +53,12 @@
   (if (pos? (count bindings))
     (let [symb (first bindings) val (second bindings)]
       `(let [~symb ~val]
-         (doseq [sprite# ~symb]
-           (.addChild (get-layer ~canvas ~layer) sprite#))
-         (with-sprite-set ~canvas ~layer ~(subvec bindings 2) ~@body)
-         (doseq [sprite# ~symb]
-           (.removeChild (get-layer ~canvas ~layer) sprite#))))
+         (try
+           (doseq [sprite# ~symb]
+             (.addChild (get-layer ~canvas ~layer) sprite#))
+           (with-sprite-set ~canvas ~layer ~(subvec bindings 2) ~@body)
+           (finally (doseq [sprite# ~symb]
+                      (.removeChild (get-layer ~canvas ~layer) sprite#))))))
     `(do ~@body)))
 
 (defmacro while-let
