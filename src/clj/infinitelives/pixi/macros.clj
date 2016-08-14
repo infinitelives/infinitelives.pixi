@@ -10,7 +10,10 @@
             (list* `assert-args more)))))
 
 (defmacro get-layer [canvas layer]
-  `(-> ~canvas :layer ~layer))
+  `(or
+    (-> ~canvas :layer ~layer)
+    (throw (js/Error (str "canvas layer " ~layer " not found.")))
+    ))
 
 (defmacro with-sprite [canvas layer bindings & body]
   (assert-args
