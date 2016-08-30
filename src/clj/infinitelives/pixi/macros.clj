@@ -15,7 +15,7 @@
     (throw (js/Error (str "canvas layer " ~layer " not found.")))
     ))
 
-(defmacro with-sprite [canvas layer bindings & body]
+(defmacro with-sprite* [canvas layer bindings & body]
   (assert-args
    (vector? bindings) "a vector for its binding"
    (even? (count bindings)) "an even number of forms in binding vector")
@@ -28,6 +28,26 @@
               (finally (.removeChild (get-layer ~canvas ~layer) ~symb)))))
     `(do ~@body)))
 
+(defmacro with-sprite [& body]
+  (cond
+    (vector? (first body))
+    `(with-sprite*
+       (infinitelives.pixi.canvas/get-default-canvas) (infinitelives.pixi.canvas/get-default-layer)
+       ~(first body)
+       ~@(next body))
+
+    (vector? (second body))
+    `(with-sprite*
+       (infinitelives.pixi.canvas/get-default-canvas) ~(first body)
+       ~(second body)
+       ~@(nnext body))
+
+    :default
+    `(with-sprite* ~@body)))
+
+(comment
+  (macroexpand-1 '(with-sprite [a (ms)] a b c)))
+
 (defmacro with-layered-sprite [bindings & body]
   (assert-args
    (vector? bindings) "a vector for its binding"
@@ -38,7 +58,7 @@
           layer (second bindings)
           val (nth bindings 2)]
       `(let [~symb ~val
-             canvas# (infinitelives.pixi.canvas/get)]
+             canvas# (infinitelives.pixi.canvas/get-default-canvas)]
          (try (.addChild
                (get-layer canvas# ~layer)
                ~symb)
@@ -48,7 +68,7 @@
                         ~symb)))))
     `(do ~@body)))
 
-(defmacro with-sprite-set [canvas layer bindings & body]
+(defmacro with-sprite-set* [canvas layer bindings & body]
   (assert-args
    (vector? bindings) "a vector for its binding"
    (even? (count bindings)) "an even number of forms in binding vector")
@@ -63,6 +83,24 @@
            (finally (doseq [sprite# ~symb]
                       (.removeChild (get-layer ~canvas ~layer) sprite#))))))
     `(do ~@body)))
+
+(defmacro with-sprite-set [& body]
+  (cond
+    (vector? (first body))
+    `(with-sprite-set*
+       (infinitelives.pixi.canvas/get-default-canvas) (infinitelives.pixi.canvas/get-default-layer)
+       ~(first body)
+       ~@(next body))
+
+    (vector? (second body))
+    `(with-sprite-set*
+       (infinitelives.pixi.canvas/get-default-canvas) ~(first body)
+       ~(second body)
+       ~@(nnext body))
+
+    :default
+    `(with-sprite-set* ~@body)))
+
 
 (defmacro while-let
     "Repeatedly executes body while test expression is true, evaluating the body with binding-form bound to the value of test."
