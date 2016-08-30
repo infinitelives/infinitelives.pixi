@@ -12,10 +12,11 @@
 
 (defn make-sprite
   "construct a sprite by its texture. optionally pass in other things"
-  [texture & {:keys [x y xhandle yhandle scale alpha interactive mousedown
+  [texture & {:keys [x y xhandle yhandle scale alpha
                      rotation tint tiling tiling-width tiling-height visible
                      mousemove mousedown mouseup mouseupoutside
-                     touchmove touchdown touchup touchupoutside]
+                     touchmove touchdown touchup touchupoutside
+                     buttonmode]
               :or {x 0 y 0
                    xhandle 0.5 yhandle 0.5
                    scale 1
@@ -40,8 +41,8 @@
               (make-point (get scale 0) (get scale 1)))))
     (when-not (= 1 alpha)
       (set! (.-alpha s) alpha))
-    (.setInteractive s (or mousemove mousedown mouseup mouseupoutside
-                           touchmove touchdown touchup touchupoutside))
+    (set! (.-interactive s) (or mousemove mousedown mouseup mouseupoutside
+                                touchmove touchdown touchup touchupoutside))
 
     (when mousedown (set! (.-mousedown s) mousedown))
     (when mousemove (set! (.-mousemove s) mousemove))
@@ -52,6 +53,8 @@
     (when touchmove (set! (.-touchmove s) touchmove))
     (when touchup (set! (.-touchup s) touchup))
     (when touchupoutside (set! (.-touchupoutside s) touchupoutside))
+
+    (when-not (nil? buttonmode) (set! (.-buttonMode s) buttonmode))
 
     (when tint (set! (.-tint s) tint))
     s))
