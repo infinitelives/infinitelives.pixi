@@ -10,28 +10,13 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
 )
 
-(def canvas-store (atom {}))
+(def ^:dynamic *default-canvas* nil)
+(defn get-default-canvas [] *default-canvas*)
+(defn set-default-canvas! [canvas] (set! *default-canvas* canvas))
 
-(defn add!
-  ([key canvas]
-   (swap! canvas-store assoc key canvas))
-  ([canvas]
-   (add! :default canvas)))
-
-(defn set-default-once!
-  [canvas]
-  (when-not (:default @canvas-store)
-    (add! canvas)))
-
-(defn remove!
-  ([key]
-   (swap! canvas-store dissoc key)))
-
-(defn get
-  ([key]
-   (key @canvas-store))
-  ([]
-   (:default @canvas-store)))
+(def ^:dynamic *default-layer* nil)
+(defn get-default-layer [] *default-layer*)
+(defn set-default-layer! [layer] (set! *default-layer* layer))
 
 (defn make
   "make a new pixi canvas, or initialise pixi with an existing canvas.
@@ -40,6 +25,8 @@
 
   :expand        if true makes the canvas take the entire window
   :engine        can be :webgl :canvas or :auto (default :auto)
+  :default       true or false to set the default canvas to this
+                 created one. defaults to true.
 
   and either:
 
@@ -51,14 +38,15 @@
   :y             y position for the new canvas
   :width         width of new canvas
   :height        height of new canvas"
-  [{:keys [expand x y width height canvas engine background]
+  [{:keys [expand x y width height canvas engine background default]
     :or {expand false
          x 0
          y 0
          width 800
          height 600
          background 0x500000
-         engine :auto}}]
+         engine :auto
+         default true}}]
   (let [fswidth (.-innerWidth js/window)
         fsheight (.-innerHeight js/window)
 
@@ -107,8 +95,7 @@
     ;; return canvas and pixi renderer
     {
      :renderer rend
-     :canvas (or canvas actual-canvas)
-     }))
+     :canvas (or canvas actual-canvas)}))
 
 (defn make-stage
   "Layout the stage structure"
@@ -206,6 +193,8 @@
   :origins       A mapping of layer names to their origin positions. Default
                  position is center. Positions can be :center :top :bottom
                  :left :right :top-left :top-right :bottom-left :bottom-right
+  :default       if true this becomes the default canvas
+  :default-layer specify a default layer. If unspecified, is the top layer
 
   and either:
 
@@ -220,7 +209,9 @@
   "
   [opts]
   (let [{:keys [renderer canvas layer layers stage
-                origins fullscreen-button] :or {origins {}} :as world}
+                origins fullscreen-button default
+                default-layer] :or {origins {}
+                                    default true} :as world}
         (into (make opts)
               (make-stage opts))]
     ;; add the stages to the canvas
@@ -297,7 +288,13 @@
                      :resize-fn resize-fn
                      :fullscreen-fn fullscreen-fn
                      :expand-fn expand-fn})]
-        (set-default-once! canvas)
+        (when default
+          (set-default-canvas! canvas))
+
+        (if default-layer
+          (set-default-layer! default-layer)
+          (set-default-layer! (last layers)))
+
         canvas))))
 
 (defn add-fullscreen-button! [{:keys [fullscreen-fn]}]
