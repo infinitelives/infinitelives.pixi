@@ -79,8 +79,11 @@
     (.addChild stage s)
     s))
 
-(defn get-texture [key scale]
-  (scale (get @!texture-store key)))
+(defn get-texture
+  ([key scale]
+   (scale (get @!texture-store key)))
+  ([key]
+   (get-texture key :nearest)))
 
 ;; setup a pixi texture cache keyed by the tail of its filename
 (defn- register!
