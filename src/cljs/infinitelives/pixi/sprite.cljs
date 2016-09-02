@@ -1,9 +1,11 @@
 (ns infinitelives.pixi.sprite
   (:require [cljsjs.pixi]
             [infinitelives.utils.vec2 :as vec2]
-            [infinitelives.pixi.texture :as texture]
-            )
-)
+            [infinitelives.pixi.texture :as texture]))
+
+(def ^:dynamic *default-scale* 1)
+(defn get-default-scale [] *default-scale*)
+(defn set-default-scale! [scale] (set! *default-scale* scale))
 
 (defn make-point
   "Make a PIXI Point from x and y"
@@ -19,7 +21,7 @@
                      buttonmode]
               :or {x 0 y 0
                    xhandle 0.5 yhandle 0.5
-                   scale 1
+                   scale *default-scale*
                    alpha 1
                    rotation 0
                    tiling false}}]
@@ -84,8 +86,9 @@
   (set! (.-pivot.x sprite) x)
   (set! (.-pivot.y sprite) y))
 
-(defn set-scale! ([sprite s]
-                  (set! (.-scale sprite) (make-point s s)))
+(defn set-scale!
+  ([sprite s]
+   (set! (.-scale sprite) (make-point s s)))
   ([sprite sx sy]
    (set! (.-scale sprite) (make-point sx sy))))
 
