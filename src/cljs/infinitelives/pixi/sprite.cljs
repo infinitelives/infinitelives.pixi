@@ -151,3 +151,33 @@
         ]
     (set-pivot! container (* xhandle width) (* yhandle height))
     container))
+
+(defn make-container
+  [children & {:keys [x y xhandle yhandle scale alpha
+                      rotation tint visible
+                      mousemove mousedown mouseup mouseupoutside
+                      touchmove touchdown touchup touchupoutside
+                      buttonmode]
+               :or {x 0 y 0
+                    xhandle 0.5 yhandle 0.5
+                    scale 1
+                    alpha 1
+                    rotation 0}}]
+  (let [container (js/PIXI.Container.)]
+    (assert container "creation of container failed and returned nil")
+    (set! (.-x container) x)
+    (set! (.-y container) y)
+    (set! (.-rotation container) rotation)
+    (set! (.-visible container) visible)
+    (when-not (= scale 1)
+      (set! (.-scale container)
+            (if (number? scale)
+              (make-point scale scale)
+              (make-point (get scale 0) (get scale 1)))))
+    (when-not (= 1 alpha)
+      (set! (.-alpha container) alpha))
+    (when tint (set! (.-tint container) tint))
+
+    (doseq [child children] (.addChild container child))
+    (update-container-handle container :xhandle xhandle :yhandle yhandle)
+    container))
