@@ -152,6 +152,14 @@
     (set-pivot! container (* xhandle width) (* yhandle height))
     container))
 
+;; (defprotocol Container
+;;   (update-handle [container & handles]))
+
+;; (extend-type js/PIXI.Container
+;;   Container
+;;   (update-handle
+;;     ([container & handles] (apply update-container-handles container handles))))
+
 (defn make-container
   [children & {:keys [x y xhandle yhandle scale alpha
                       rotation tint visible
