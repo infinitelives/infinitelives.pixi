@@ -35,7 +35,7 @@
     (set! (.-x s) x)
     (set! (.-y s) y)
     (set! (.-rotation s) rotation)
-    (set! (.-visibile s) visible)
+    (set! (.-visible s) visible)
     (when-not (= scale 1)
       (set! (.-scale s)
             (if (number? scale)
