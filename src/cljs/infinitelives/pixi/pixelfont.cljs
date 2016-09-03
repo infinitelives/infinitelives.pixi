@@ -41,7 +41,9 @@
   (font-key @pixel-fonts))
 
 (defn make-text [font-key text & {:keys [tint scale anchor rotation
-                                         x y visible]}]
+                                         x y visible
+                                         xhandle yhandle]
+                                  :or {scale s/*default-scale*}}]
   (let [font (get-font font-key)
         batch
         (if tint
@@ -64,7 +66,7 @@
 
           (do
             ;character is present, add the sprite to the container
-            (.addChild batch (s/make-sprite texture :x (+ xp koff) :y yp :xhandle 0 :yhandle 0 :tint tint))
+            (.addChild batch (s/make-sprite texture :x (+ xp koff) :y yp :xhandle 0 :yhandle 0 :tint tint :scale 1))
             (if (seq l)
               (recur l (+ xp w 1.0 koff) yp c)
               (s/set-pivot! batch (/ (+ xp w koff) 2.0) 0))))))
