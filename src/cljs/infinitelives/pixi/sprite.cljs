@@ -131,3 +131,23 @@
         pos-x (get-x sprite)
         pos-y (get-y sprite)]
     [(+ pos-x x) (+ pos-y y) (+ pos-x x w) (+ pos-y y h)]))
+
+(defn update-container-handle [container & {:keys [xhandle yhandle]
+                                            :or {xhandle 0.5 yhandle 0.5}}]
+  (let [children (.-children container)
+        edges (map get-edges children)
+        lefts (map first edges)
+        tops (map second edges)
+        rights (map #(nth % 2) edges)
+        bottoms (map #(nth % 3) edges)
+
+        left (apply min lefts)
+        top (apply min tops)
+        right (apply max rights)
+        bottom (apply max bottoms)
+
+        width (- right left)
+        height (- bottom top)
+        ]
+    (set-pivot! container (* xhandle width) (* yhandle height))
+    container))
