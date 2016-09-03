@@ -121,3 +121,13 @@
 (defn get-xy [sprite]
   [(.-position.x sprite)
    (.-position.y sprite)])
+
+(defn get-rects [sprite]
+  (let [bounds (.getBounds sprite)]
+    [(.-x bounds) (.-y bounds) (.-width bounds) (.-height bounds)]))
+
+(defn get-edges [sprite]
+  (let [[x y w h] (get-rects sprite)
+        pos-x (get-x sprite)
+        pos-y (get-y sprite)]
+    [(+ pos-x x) (+ pos-y y) (+ pos-x x w) (+ pos-y y h)]))
