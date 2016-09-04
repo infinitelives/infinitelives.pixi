@@ -23,6 +23,7 @@
                    xhandle 0.5 yhandle 0.5
                    scale *default-scale*
                    alpha 1
+                   visible true
                    rotation 0
                    tiling false}}]
   (let [s (if tiling
@@ -170,6 +171,7 @@
                     xhandle 0.5 yhandle 0.5
                     scale 1
                     alpha 1
+                    visible true
                     rotation 0}}]
   (let [container (js/PIXI.Container.)]
     (assert container "creation of container failed and returned nil")
