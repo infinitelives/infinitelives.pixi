@@ -44,45 +44,39 @@
                                          x y visible
                                          xhandle yhandle]
                                   :or {scale s/*default-scale*
-                                       visible true}}]
-  (let [font (get-font font-key)
-        batch (s/make-container
-               []
-               :particle (not tint)
-               :scale scale
-               :rotation rotation
-               :x x
-               :y y
-               :visible visible
-               )]
-    (loop [[c & l] (seq text)
-           xp 0 yp 0
-           last-c nil]
-      (let [char ((:font font) c)
-            {:keys [texture pos size]} char
-            [x y] pos
-            [w h] size
-            pair (str last-c c)
-            koff ((:kerning font) pair)
-            ]
-        (if (nil? char)
-          ;; if character is not present in font map, put a space
-          (when (seq l)
-            (recur l (+ xp (:space font)) yp c))
+                                       visible true
+                                       xhandle 0.5
+                                       yhandle 0.5}}]
+  (let [font (get-font font-key)]
+    (s/make-container
+     (loop [[c & l] (seq text)
+            xp 0 yp 0
+            last-c nil ;; remember last character for kerning
+            sprite-set []]
+       (let [char ((:font font) c)
+             {:keys [texture pos size]} char
+             [x y] pos
+             [w h] size
+             pair (str last-c c)
+             koff ((:kerning font) pair)
+             ]
+         (if (nil? char)
+           ;; if character is not present in font map, put a space
+           (when (seq l)
+             (recur l (+ xp (:space font)) yp c sprite-set))
 
-          (do
-                                        ;character is present, add the sprite to the container
-            (.addChild batch (s/make-sprite texture :x (+ xp koff) :y yp :xhandle 0 :yhandle 0 :tint tint :scale 1))
-            (if (seq l)
-              (recur l (+ xp w 1.0 koff) yp c)
-              (s/set-pivot! batch (/ (+ xp w koff) 2.0) 0))))))
-
-    ;; set setup details
-    ;; (when xhandle
-    ;;   (s/set-xhandle! batch xhandle))
-    ;; (when yhandle
-    ;;   (s/set-yhandle! batch yhandle))
-    batch))
+           (let [sprite (s/make-sprite texture :x (+ xp koff) :y yp :xhandle 0 :yhandle 0 :tint tint :scale 1)]
+             (if (seq l)
+               (recur l (+ xp w 1.0 koff) yp c (conj sprite-set sprite))
+               (conj sprite-set sprite))))))
+     :particle (not tint)
+     :scale scale
+     :rotation rotation
+     :x x
+     :y y
+     :visible visible
+     :xhandle xhandle
+     :yhandle yhandle)))
 
 (comment
   (infinitelives.pixi.pixelfont/load-pixel-font :test-font :test [["A" 146 89 140 97] ["B" 154 89 148 97]])
