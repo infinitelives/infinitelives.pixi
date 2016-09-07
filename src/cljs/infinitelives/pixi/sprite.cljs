@@ -133,6 +133,29 @@
         pos-y (get-y sprite)]
     [(+ pos-x x) (+ pos-y y) (+ pos-x x w) (+ pos-y y h)]))
 
+(defn update-container-handle!
+  [container xhandle yhandle]
+  (let [children (.-children container)
+        edges (map get-edges children)
+        lefts (map first edges)
+        tops (map second edges)
+        rights (map #(nth % 2) edges)
+        bottoms (map #(nth % 3) edges)
+
+        left (apply min lefts)
+        top (apply min tops)
+        right (apply max rights)
+        bottom (apply max bottoms)
+
+        width (- right left)
+        height (- bottom top)
+
+        x-pivot (* xhandle width)
+        y-pivot (* yhandle height)
+        ]
+    (set-pivot! container x-pivot y-pivot)
+    [x-pivot y-pivot]))
+
 (defprotocol Container
   (update-handle! [container xhandle yhandle]))
 
@@ -140,40 +163,27 @@
   Container
   (update-handle!
     ([container xhandle yhandle]
-     (let [children (.-children container)
-           edges (map get-edges children)
-           lefts (map first edges)
-           tops (map second edges)
-           rights (map #(nth % 2) edges)
-           bottoms (map #(nth % 3) edges)
+     (update-container-handle! container xhandle yhandle))))
 
-           left (apply min lefts)
-           top (apply min tops)
-           right (apply max rights)
-           bottom (apply max bottoms)
-
-           width (- right left)
-           height (- bottom top)
-
-           x-pivot (* xhandle width)
-           y-pivot (* yhandle height)
-           ]
-       (set-pivot! container x-pivot y-pivot)
-       [x-pivot y-pivot]))))
+(extend-type js/PIXI.ParticleContainer
+  Container
+  (update-handle!
+    ([container xhandle yhandle]
+     (update-container-handle! container xhandle yhandle))))
 
 (defn make-container
   [children & {:keys [x y xhandle yhandle scale alpha
                       rotation tint visible
                       mousemove mousedown mouseup mouseupoutside
                       touchmove touchdown touchup touchupoutside
-                      buttonmode]
+                      buttonmode particle]
                :or {x 0 y 0
                     xhandle 0.5 yhandle 0.5
                     scale 1
                     alpha 1
                     visible true
                     rotation 0}}]
-  (let [container (js/PIXI.Container.)]
+  (let [container (if particle (js/PIXI.ParticleContainer.) (js/PIXI.Container.))]
     (assert container "creation of container failed and returned nil")
     (set! (.-x container) x)
     (set! (.-y container) y)
