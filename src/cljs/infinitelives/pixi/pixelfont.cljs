@@ -43,12 +43,18 @@
 (defn make-text [font-key text & {:keys [tint scale anchor rotation
                                          x y visible
                                          xhandle yhandle]
-                                  :or {scale s/*default-scale*}}]
+                                  :or {scale s/*default-scale*
+                                       visible true}}]
   (let [font (get-font font-key)
-        batch
-        (if tint
-          (js/PIXI.Container.)
-          (js/PIXI.ParticleContainer.))]
+        batch (s/make-container
+               []
+               :particle (not tint)
+               :scale scale
+               :rotation rotation
+               :x x
+               :y y
+               :visible visible
+               )]
     (loop [[c & l] (seq text)
            xp 0 yp 0
            last-c nil]
@@ -65,25 +71,17 @@
             (recur l (+ xp (:space font)) yp c))
 
           (do
-            ;character is present, add the sprite to the container
+                                        ;character is present, add the sprite to the container
             (.addChild batch (s/make-sprite texture :x (+ xp koff) :y yp :xhandle 0 :yhandle 0 :tint tint :scale 1))
             (if (seq l)
               (recur l (+ xp w 1.0 koff) yp c)
               (s/set-pivot! batch (/ (+ xp w koff) 2.0) 0))))))
 
     ;; set setup details
-    (when scale
-      (s/set-scale! batch scale))
-    (when rotation
-      (s/set-rotation! batch rotation))
-    (when anchor
-      (s/set-anchor! batch (anchor 0) (anchor 1)))
-    (when x
-      (s/set-x! batch x))
-    (when y
-      (s/set-y! batch y))
-    (when-not (nil? visible)
-      (s/set-visible! batch visible))
+    ;; (when xhandle
+    ;;   (s/set-xhandle! batch xhandle))
+    ;; (when yhandle
+    ;;   (s/set-yhandle! batch yhandle))
     batch))
 
 (comment
