@@ -65,6 +65,14 @@
             (recur l (+ xp w 1.0 koff) yp c (conj sprite-set sprite))
             (conj sprite-set sprite)))))))
 
+(defn add-text! [batch font-key text]
+  (doseq [spr (make-char-sprite-set font-key text)]
+    (.addChild batch spr)))
+
+(defn change-text! [batch font-key text]
+  (clear-text! batch)
+  (add-text! batch font-key text))
+
 (defn make-text [font-key text & {:keys [tint scale anchor rotation
                                          x y visible
                                          xhandle yhandle]
