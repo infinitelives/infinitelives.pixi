@@ -43,6 +43,28 @@
 (defn clear-text! [batch]
   (.removeChildren batch))
 
+(defn make-char-sprite-set [font-key text]
+  (loop [[c & l] (seq text)
+         xp 0 yp 0
+         last-c nil ;; remember last character for kerning
+         sprite-set []]
+    (let [char ((:font font) c)
+          {:keys [texture pos size]} char
+          [x y] pos
+          [w h] size
+          pair (str last-c c)
+          koff ((:kerning font) pair)
+          ]
+      (if (nil? char)
+        ;; if character is not present in font map, put a space
+        (when (seq l)
+          (recur l (+ xp (:space font)) yp c sprite-set))
+
+        (let [sprite (s/make-sprite texture :x (+ xp koff) :y yp :xhandle 0 :yhandle 0 :tint tint :scale 1)]
+          (if (seq l)
+            (recur l (+ xp w 1.0 koff) yp c (conj sprite-set sprite))
+            (conj sprite-set sprite)))))))
+
 (defn make-text [font-key text & {:keys [tint scale anchor rotation
                                          x y visible
                                          xhandle yhandle]
