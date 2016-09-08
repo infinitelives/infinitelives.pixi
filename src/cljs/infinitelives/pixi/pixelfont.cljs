@@ -40,6 +40,9 @@
 (defn get-font [font-key]
   (font-key @pixel-fonts))
 
+(defn clear-text! [batch]
+  (.removeChildren batch))
+
 (defn make-text [font-key text & {:keys [tint scale anchor rotation
                                          x y visible
                                          xhandle yhandle]
