@@ -124,7 +124,7 @@
    (.-position.y sprite)])
 
 (defn get-rects [sprite]
-  (let [bounds (.getBounds sprite)]
+  (let [bounds (.getLocalBounds sprite)]
     [(.-x bounds) (.-y bounds) (.-width bounds) (.-height bounds)]))
 
 (defn get-edges [sprite]
