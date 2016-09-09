@@ -2,7 +2,9 @@
   (:require [infinitelives.pixi.texture :as t]
             [infinitelives.pixi.resources :as r]
             [infinitelives.pixi.sprite :as s]
-            [infinitelives.utils.console :refer [log]]))
+            [infinitelives.utils.console :refer [log]]
+            [cljs.core.async :refer [<! chan put! timeout close!]])
+  (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (defonce pixel-fonts
   (atom {}))
@@ -91,6 +93,35 @@
    :visible visible
    :xhandle xhandle
    :yhandle yhandle))
+
+(defn appear-text [font-key text & {:keys [tint scale anchor rotation
+                                           x y visible
+                                           xhandle yhandle
+                                           delay]
+                                    :or {scale s/*default-scale*
+                                         visible true
+                                         xhandle 0.5
+                                         yhandle 0.5
+                                         delay 32}}]
+  (let [chars (make-char-sprite-set font-key text tint)
+        batch
+        (s/make-container
+         []
+         :particle (not tint)
+         :scale scale
+         :rotation rotation
+         :x x
+         :y y
+         :visible visible
+         :xhandle xhandle
+         :yhandle yhandle)]
+    (go
+      (loop [[c & r] chars]
+        (.addChild batch c)
+        (s/update-handle! batch xhandle yhandle)
+        (<! (timeout delay))
+        (when r (recur r))))
+    batch))
 
 (comment
   (infinitelives.pixi.pixelfont/load-pixel-font :test-font :test [["A" 146 89 140 97] ["B" 154 89 148 97]])
