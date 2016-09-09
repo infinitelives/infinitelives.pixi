@@ -43,7 +43,7 @@
 (defn clear-text! [batch]
   (.removeChildren batch))
 
-(defn make-char-sprite-set [font-key text]
+(defn make-char-sprite-set [font-key text tint]
   (let [font (get-font font-key)]
     (loop [[c & l] (seq text)
            xp 0 yp 0
@@ -82,7 +82,7 @@
                                        xhandle 0.5
                                        yhandle 0.5}}]
   (s/make-container
-   (make-char-sprite-set font-key text)
+   (make-char-sprite-set font-key text tint)
    :particle (not tint)
    :scale scale
    :rotation rotation
