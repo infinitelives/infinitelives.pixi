@@ -26,18 +26,19 @@
                            size)}]))
            layout))))
 
-(defn make-font [resource-key layout kerning space]
+(defn make-font [resource-key layout kerning space height]
   {
    :font (make-font-description resource-key layout)
    :texture (r/get-texture resource-key :nearest)
    :kerning kerning
    :space space
+   :height height
    })
 
 (defn load-pixel-font
-  [pixel-font-name texture-key layout kerning space]
+  [pixel-font-name texture-key layout kerning space height]
   (swap! pixel-fonts assoc pixel-font-name
-         (make-font texture-key layout kerning space)))
+         (make-font texture-key layout kerning space height)))
 
 (defn get-font [font-key]
   (font-key @pixel-fonts))

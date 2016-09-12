@@ -93,6 +93,8 @@
                    ImageIO/read)
         chars (apply str chars)
         dimensions (char-dimensions image x1 x2 y1 y2 chars)
+        {:keys [y1 y2]} (first dimensions)
+        height (- y2 y1)
         final-dims (reduce
                     (fn [acc [func & args]]
                       (eval (concat [func (vec acc)] args)))
@@ -104,7 +106,8 @@
       ~(vec (for [{:keys [char x1 y1 x2 y2]} final-dims]
               [(str char) x1 y1 x2 y2]))
       ~kerning
-      ~space)))
+      ~space
+      ~height)))
 
 (comment
   (macroexpand '(pixel-font :test-font "test.png" [127 84] [350 128]
