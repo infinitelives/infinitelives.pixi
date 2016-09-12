@@ -73,13 +73,17 @@
               (recur l (+ xp w 1.0 koff) yp c (conj sprite-set sprite))
               (conj sprite-set sprite))))))))
 
-(defn add-text! [batch font-key text tint]
-  (doseq [spr (make-char-sprite-set font-key text tint)]
+(defn add-text! [batch font-key text &
+                 {:keys [tint]
+                  :or {tint 0xffffff}}]
+  (doseq [spr (make-char-sprite-set font-key text :tint tint)]
     (.addChild batch spr)))
 
-(defn change-text! [batch font-key text tint]
+(defn change-text! [batch font-key text &
+                    {:keys [tint]
+                     :or {tint 0xffffff}}]
   (clear-text! batch)
-  (add-text! batch font-key text tint))
+  (add-text! batch font-key text :tint tint))
 
 (defn make-text [font-key text & {:keys [tint scale anchor rotation
                                          x y visible
@@ -108,7 +112,7 @@
                                          xhandle 0.5
                                          yhandle 0.5
                                          delay 32}}]
-  (let [chars (make-char-sprite-set font-key text tint)
+  (let [chars (make-char-sprite-set font-key text :tint tint)
         batch
         (s/make-container
          []
