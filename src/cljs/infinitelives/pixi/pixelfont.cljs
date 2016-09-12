@@ -46,10 +46,14 @@
 (defn clear-text! [batch]
   (.removeChildren batch))
 
-(defn make-char-sprite-set [font-key text tint]
+(defn make-char-sprite-set [font-key text &
+                            {:keys [tint x y]
+                             :or
+                             {tint 0xffffff
+                              x 0 y 0}}]
   (let [font (get-font font-key)]
     (loop [[c & l] (seq text)
-           xp 0 yp 0
+           xp x yp y
            last-c nil ;; remember last character for kerning
            sprite-set []]
       (let [char ((:font font) c)
