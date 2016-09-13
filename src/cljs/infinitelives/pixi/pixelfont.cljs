@@ -47,10 +47,12 @@
   (.removeChildren batch))
 
 (defn make-char-sprite-set [font-key text &
-                            {:keys [tint x y]
+                            {:keys [tint x y space-padding]
                              :or
                              {tint 0xffffff
-                              x 0 y 0}}]
+                              x 0 y 0
+                              space-padding 0
+                              }}]
   (let [font (get-font font-key)]
     (loop [[c & l] (seq text)
            xp x yp y
@@ -66,9 +68,9 @@
         (if (nil? char)
           ;; if character is not present in font map, put a space
           (when (seq l)
-            (recur l (+ xp (:space font)) yp c sprite-set))
+            (recur l (+ xp (:space font) space-padding) yp c sprite-set))
 
-          (let [sprite (s/make-sprite texture :x (+ xp koff) :y yp :xhandle 0 :yhandle 0 :tint tint :scale 1)]
+          (let [sprite (s/make-sprite texture :x (int (+ xp koff)) :y yp :xhandle 0 :yhandle 0 :tint tint :scale 1)]
             (if (seq l)
               (recur l (+ xp w 1.0 koff) yp c (conj sprite-set sprite))
               (conj sprite-set sprite))))))))
