@@ -194,11 +194,17 @@
     (let [words (subs text 0 e)
           width (string-width font-key words)
           ]
-      (log "words" words width r n size
-           )
-      (if (and (< width size) r)
-        (recur (inc n) r)
-        n))))
+      (cond
+        (and (< width size) r)
+        (recur (inc n) r) ;; more words and more space
+
+        (< width size)
+        (inc n)           ;; no more words, fits in
+
+        :default
+        n                 ;; no more words, doesn't fit in
+        ))))
+
 
 
 
