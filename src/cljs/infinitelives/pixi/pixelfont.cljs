@@ -206,7 +206,7 @@
         ))))
 
 (defn layout-text [font-key text x y right line-spacing justify charset]
-  (assert (#{:justified :ragged} justify) "justify needs to be set correctly")
+  (assert (#{:justify :ragged} justify) "justify needs to be set correctly")
   (let [font (get-font font-key)
         height (:height font)
         word-extents (vec (word-beginnings-ends text))
