@@ -205,7 +205,30 @@
         n                 ;; no more words, doesn't fit in
         ))))
 
-
+(defn layout-text [font-key text x y right line-spacing justify charset]
+  (assert (#{:justified :ragged} justify) "justify needs to be set correctly")
+  (let [font (get-font font-key)
+        height (:height font)
+        word-extents (vec (word-beginnings-ends text))
+        num (how-many-words-fit font-key text (map second word-extents) right)
+        start (-> word-extents first first)
+        end (-> num dec word-extents second)
+        section (subs text start (- end start))
+        width (string-width font-key section)
+        diff (- right width)
+        num-spaces (count (re-seq #" " section))
+        more? (< num (count word-extents))
+        padding (if more? (/ diff num-spaces) 0)
+        line (make-char-sprite-set font-key section
+                                      :tint 0xffffff
+                                      :x 0 :y y
+                                      :space-padding (if (= :justify justify) padding 0))]
+    (if more?
+      (layout-text font-key (subs text (-> num word-extents first))
+                 x (+ y (* line-spacing height))
+                 right line-spacing justify
+                 (into charset line))
+      (into charset line))))
 
 
 
