@@ -95,7 +95,7 @@
                                        xhandle 0.5
                                        yhandle 0.5}}]
   (s/make-container
-   (make-char-sprite-set font-key text tint)
+   :children (make-char-sprite-set font-key text tint)
    :particle (not tint)
    :scale scale
    :rotation rotation
@@ -117,7 +117,6 @@
   (let [chars (make-char-sprite-set font-key text :tint tint)
         batch
         (s/make-container
-         []
          :particle (not tint)
          :scale scale
          :rotation rotation
