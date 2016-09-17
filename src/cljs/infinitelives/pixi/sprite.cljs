@@ -172,17 +172,19 @@
      (update-container-handle! container xhandle yhandle))))
 
 (defn make-container
-  [children & {:keys [x y xhandle yhandle scale alpha
-                      rotation tint visible
-                      mousemove mousedown mouseup mouseupoutside
-                      touchmove touchdown touchup touchupoutside
-                      buttonmode particle]
-               :or {x 0 y 0
-                    xhandle 0.5 yhandle 0.5
-                    scale 1
-                    alpha 1
-                    visible true
-                    rotation 0}}]
+  [ & {:keys [children
+              x y xhandle yhandle scale alpha
+              rotation tint visible
+              mousemove mousedown mouseup mouseupoutside
+              touchmove touchdown touchup touchupoutside
+              buttonmode particle]
+       :or {children []
+            x 0 y 0
+            xhandle 0.5 yhandle 0.5
+            scale 1
+            alpha 1
+            visible true
+            rotation 0}}]
   (let [container (if particle (js/PIXI.ParticleContainer.) (js/PIXI.Container.))]
     (assert container "creation of container failed and returned nil")
     (set! (.-x container) x)
