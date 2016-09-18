@@ -201,5 +201,7 @@
     (when tint (set! (.-tint container) tint))
 
     (doseq [child children] (.addChild container child))
-    (update-handle! container xhandle yhandle)
+    (when (pos? (count children))
+      (update-handle! container xhandle yhandle))
+
     container))
