@@ -171,21 +171,28 @@
     ([container xhandle yhandle]
      (update-container-handle! container xhandle yhandle))))
 
+(defn- opts->js [opts]
+  (clj->js (into {} (for [o opts] [(name o) true]))))
+
 (defn make-container
   [ & {:keys [children
               x y xhandle yhandle scale alpha
               rotation tint visible
               mousemove mousedown mouseup mouseupoutside
               touchmove touchdown touchup touchupoutside
-              buttonmode particle]
+              buttonmode particle particle-opts]
        :or {children []
             x 0 y 0
             xhandle 0.5 yhandle 0.5
             scale 1
             alpha 1
             visible true
-            rotation 0}}]
-  (let [container (if particle (js/PIXI.ParticleContainer.) (js/PIXI.Container.))]
+            rotation 0
+            particle-opts #{:position :alpha}}}]
+  (let [container
+        (if particle
+          (js/PIXI.ParticleContainer. nil (opts->js particle-opts))
+          (js/PIXI.Container.))]
     (assert container "creation of container failed and returned nil")
     (set! (.-x container) x)
     (set! (.-y container) y)
