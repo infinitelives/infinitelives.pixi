@@ -22,10 +22,11 @@
 
   (if (pos? (count bindings))
     (let [symb (first bindings) val (second bindings)]
-      `(let [~symb ~val]
-         (try (.addChild (get-layer ~canvas ~layer) ~symb)
+      `(let [parent# (if (keyword? ~layer) (get-layer ~canvas ~layer) ~layer)
+             ~symb ~val]
+         (try (.addChild parent# ~symb)
               (with-sprite ~canvas ~layer ~(subvec bindings 2) ~@body)
-              (finally (.removeChild (get-layer ~canvas ~layer) ~symb)))))
+              (finally (.removeChild parent# ~symb)))))
     `(do ~@body)))
 
 (defmacro with-sprite [& body]
