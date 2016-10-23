@@ -188,7 +188,7 @@
             alpha 1
             visible true
             rotation 0
-            particle-opts #{:position :alpha}}}]
+            particle-opts #{:position}}}]
   (let [container
         (if particle
           (js/PIXI.ParticleContainer. nil (opts->js particle-opts))
