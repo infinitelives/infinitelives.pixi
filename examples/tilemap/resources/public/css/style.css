@@ -1,2 +1,48 @@
-/* some style */
+body, html {
+  background-color: #0D0711
+}
 
+/* infinite lives loader */
+
+.infinitelives-spinner {
+  width: 112px;
+  height: 96px;
+  background-size: 112px 96px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: infinitelives-heartbeat 1.3s ease 0s infinite normal none running;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHAAAABgCAMAAADy6AbiAAAABlBMVEUAAAD6+vquD138AAAAAnRSTlMA/1uRIrUAAABiSURBVGiB7dUxCgAgDANA/f+n3XUIoojiZW572VpKlxqyOj8ECAQCgcALwLQwm3QfCAQCgcAfwFgICAQCgcALwfQwtwNAIBAIBD4ArhaYBoBAIBAIfABMBbYDQCAQCASeBxsgDRoBe1gyXwAAAABJRU5ErkJggg==);
+}
+@-webkit-keyframes infinitelives-heartbeat {
+  0% { opacity: 0.7;
+       transform: scale(1);}
+  5% { opacity: 1;
+       transform: scale(1.2);}
+  25% { opacity: 0.7;
+        transform: scale(1);}
+  32% { opacity: 1;
+        transform: scale(1.2);}
+
+  100% { opacity: 0.5;
+         transform: scale(0.95);}
+}
+@keyframes infinitelives-heartbeat {
+  0% { opacity: 0.7;
+       transform: scale(1);}
+  5% { opacity: 1;
+       transform: scale(1.2);}
+  25% { opacity: 0.7;
+        transform: scale(1);}
+  32% { opacity: 1;
+        transform: scale(1.2);}
+  100% { opacity: 0.5;
+         transform: scale(0.95);}
+}
+/* this is optional */
+.infinitelives-spinner-vertical-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -56px;
+  margin-top: -48px;
+}
