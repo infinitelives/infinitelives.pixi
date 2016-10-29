@@ -3,13 +3,13 @@
 
 (defonce !texture-store (atom {}))
 
-(defn assoc!
+(defn add!
   "Add a texture object to the texture cache under
   the key `key`"
   [key texture]
   (swap! !texture-store assoc key texture))
 
-(defn dissoc!
+(defn remove!
   "Remove the texture keyed as `key` from the
   texture cache"
   [key]
