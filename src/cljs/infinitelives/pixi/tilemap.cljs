@@ -26,7 +26,7 @@
           (for [row (range (count tile-map))
                 col (range (count (first tile-map)))]
             (let [char (nth (tile-map row) col)]
-              (when (not= :space char)
+              (when char
                 (s/make-sprite (texture-map char)
                                :x (* tile-width col) :y (* tile-height row)
                                :xhandle 0 :yhandle 0))))))
