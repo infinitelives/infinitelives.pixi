@@ -41,9 +41,14 @@
    "│" :wall-left
    "║" :wall-right
    "═" :wall-bottom
-   " " :floor
-   "." :floor-2
-   "o" :floor-3})
+   "╔" :wall-top-left-outer
+   "╙" :wall-bottom-left-outer
+   "╕" :wall-top-right-outer
+   "┘" :wall-bottom-right-outer
+   "." :floor
+   "," :floor-2
+   "o" :floor-3
+   " " nil})
 
 (def tile-set-mapping
   {
@@ -55,9 +60,15 @@
    :wall-left [32 16]
    :wall-right [0 16]
    :wall-bottom [16 0]
+   :wall-top-left-outer [0 0]
+   :wall-bottom-left-outer [0 32]
+   :wall-top-right-outer [32 0]
+   :wall-bottom-right-outer [32 32]
    :floor [96 0]
    :floor-2 [112 0]
-   :floor-3 [128 32]})
+   :floor-3 [128 32]
+
+})
 
 (defonce canvas
   (c/init {:layers [:bg :tilemap :ui]
