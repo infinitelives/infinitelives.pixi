@@ -4,7 +4,9 @@ FIXME: Write a one-line description of your library/project.
 
 ## Overview
 
-FIXME: Write a paragraph about the library/project and highlight its goals.
+Example of using the infinitelives.pixi tilemap engine.
+
+Tiles by Michele "Buch" Bucelli [http://opengameart.org/users/buch]. Tileset sponsoreship by Abram Connelly.
 
 ## Setup
 
