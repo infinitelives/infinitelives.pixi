@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="css/style.css" rel="stylesheet" type="text/css">
   </head>
-  <body>
-    <div id="app">
-      <h2>Figwheel template</h2>
-      <p>Checkout your developer console.</p>
-    </div>
+  <!-- itch.io wont receive keyboard focus: https://github.com/itchio/itch.io/issues/112 -->
+  <body onmouseenter="window.focus();" onmousemove="window.focus();">
+    <div id="app"><div class='infinitelives-spinner infinitelives-spinner-vertical-center'></div></div>
     <script src="js/compiled/tilemap.js" type="text/javascript"></script>
   </body>
 </html>
