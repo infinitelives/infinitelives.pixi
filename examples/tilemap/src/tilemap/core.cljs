@@ -113,9 +113,29 @@
     ;; load resource url with tile sheet
     (<! (r/load-resources canvas :ui ["img/tiles.png"]))
 
-    (let [tile-set (tm/make-tile-set :tiles tile-set-mapping [16 16])]
+    (let [tile-set (tm/make-tile-set :tiles tile-set-mapping [16 16])
+          tile-sprites (->> tile-map-chars
+                            (tm/make-tile-map key-for)
+                            (tm/make-tile-sprites tile-set)
+                            )]
       (log "tile-set:" tile-set)
+      (log "tile-sprites:" tile-sprites)
       (m/with-sprite :tilemap
-        [tile-map (tm/make-tilemap tile-set key-for tile-map-chars
-                                   :scale 4)]
-        (<! (e/wait-frames 10000))))))
+        [tile-map (tm/make-tilemap tile-sprites
+                                   :scale 4
+                                   :particle-opts #{:uvs})]
+
+        (while true
+          ;; closed
+          (<! (e/wait-frames 120))
+          (tm/alter-tile! tile-sprites [0 2] tile-set :door-left-shut-1)
+          (tm/alter-tile! tile-sprites [1 2] tile-set :door-left-shut-2)
+          (tm/alter-tile! tile-sprites [0 3] tile-set :door-left-shut-3)
+          (tm/alter-tile! tile-sprites [1 3] tile-set :door-left-shut-4)
+
+          ;; open
+          (<! (e/wait-frames 120))
+          (tm/alter-tile! tile-sprites [0 2] tile-set :door-left-1)
+          (tm/alter-tile! tile-sprites [1 2] tile-set :door-left-2)
+          (tm/alter-tile! tile-sprites [0 3] tile-set :door-left-3)
+          (tm/alter-tile! tile-sprites [1 3] tile-set :door-left-4))))))
