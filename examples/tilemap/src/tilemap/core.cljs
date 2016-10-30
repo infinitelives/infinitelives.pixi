@@ -118,8 +118,6 @@
                             (tm/make-tile-map key-for)
                             (tm/make-tile-sprites tile-set)
                             )]
-      (log "tile-set:" tile-set)
-      (log "tile-sprites:" tile-sprites)
       (m/with-sprite :tilemap
         [tile-map (tm/make-tilemap tile-sprites
                                    :scale 4
