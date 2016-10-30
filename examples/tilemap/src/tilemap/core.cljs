@@ -19,15 +19,15 @@
    " ┌──────╖          "
    " │o...oo║          "
    "<>.,....║   -=     "
-   "#$.....o╙───{}╖    "
+   "#$.....:╙───{}╖    "
    " │o..,.....,..║    "
    " │o....o╔═══╕.║    "
-   " │oo..oo║   │.║    "
+   " │:o..oo║   │.║    "
    " ╘()════╝   │o║    "
    "  []   -=   │.║    "
    "     ┌─{}───┘.╙╖   "
    "     │oo..,...o║   "
-   "    !@..o......║   "
+   "    !@..:......║   "
    "    AB,.....o..║   "
    "     ╘═════════╝   "])
 
@@ -49,21 +49,22 @@
    "=" :door-top-right
    "{" :door-bottom-left
    "}" :door-bottom-right
-   "(" :a
-   ")" :b
-   "[" :c
-   "]" :d
-   "<" :e
-   ">" :f
-   "#" :g
-   "$" :h
-   "!" :i
-   "@" :j
-   "A" :k
-   "B" :l
+   "(" :door-bottom-1
+   ")" :door-bottom-2
+   "[" :door-bottom-3
+   "]" :door-bottom-4
+   "<" :door-left-1
+   ">" :door-left-2
+   "#" :door-left-3
+   "$" :door-left-4
+   "!" :door-left-shut-1
+   "@" :door-left-shut-2
+   "A" :door-left-shut-3
+   "B" :door-left-shut-4
    "." :floor
    "," :floor-2
    "o" :floor-3
+   ":" :floor-4
    " " nil})
 
 (def tile-set-mapping
@@ -83,22 +84,23 @@
    :floor [96 0]
    :floor-2 [112 0]
    :floor-3 [128 32]
+   :floor-4 [128 0]
    :door-top-left [32 80]
    :door-top-right [48 80]
    :door-bottom-left [32 96]
    :door-bottom-right [48 96]
-   :a [112 112]
-   :b [128 112]
-   :c [112 128]
-   :d [128 128]
-   :e [144 144]
-   :f [160 144]
-   :g [144 160]
-   :h [160 160]
-   :i [144 176]
-   :j [160 176]
-   :k [144 192]
-   :l [160 192]
+   :door-bottom-1 [112 112]
+   :door-bottom-2 [128 112]
+   :door-bottom-3 [112 128]
+   :door-bottom-4 [128 128]
+   :door-left-1 [144 144]
+   :door-left-2 [160 144]
+   :door-left-3 [144 160]
+   :door-left-4 [160 160]
+   :door-left-shut-1 [144 176]
+   :door-left-shut-2 [160 176]
+   :door-left-shut-3 [144 192]
+   :door-left-shut-4 [160 192]
 })
 
 (defonce canvas
