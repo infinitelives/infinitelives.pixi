@@ -87,6 +87,18 @@
   (set! (.-pivot.x sprite) x)
   (set! (.-pivot.y sprite) y))
 
+(defn get-pivot [sprite]
+  (.-pivot sprite))
+
+(defn get-pivot-x [sprite]
+  (.-pivot.x sprite))
+
+(defn get-pivot-y [sprite]
+  (.-pivot.y sprite))
+
+(defn get-pivot-xy [sprite]
+  [(.-pivot.x sprite) (.-pivot.y sprite)])
+
 (defn set-scale!
   ([sprite s]
    (set! (.-scale sprite) (make-point s s)))
