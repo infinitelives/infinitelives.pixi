@@ -164,8 +164,8 @@
         width (- right left)
         height (- bottom top)
 
-        x-pivot (* xhandle width)
-        y-pivot (* yhandle height)
+        x-pivot (+ left (* xhandle width))
+        y-pivot (+ top (* yhandle height))
         ]
     (set-pivot! container x-pivot y-pivot)
     [x-pivot y-pivot]))
