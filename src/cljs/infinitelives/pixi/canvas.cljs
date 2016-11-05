@@ -124,7 +124,6 @@
 
 
 (defn- center-container! [canvas layer edge [x y]]
-  (log "x:" x "y:" y)
   (let [canvas-width (.-width canvas)
         canvas-height (.-height canvas)
         middle-x (Math/round (/ canvas-width 2))
