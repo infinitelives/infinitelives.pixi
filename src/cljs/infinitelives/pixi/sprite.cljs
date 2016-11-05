@@ -140,12 +140,13 @@
     [(.-x bounds) (.-y bounds) (.-width bounds) (.-height bounds)]))
 
 (defn get-edges [sprite]
-  (let [[px py] (get-pivot-xy sprite)
+  (let [neg-pivot-x (- (get-pivot-x sprite))
+        neg-pivot-y (- (get-pivot-y sprite))
         [x y w h] (get-rects sprite)
         pos-x (get-x sprite)
         pos-y (get-y sprite)]
-    [(+ pos-x x (- px)) (+ pos-y y (- py))
-     (+ pos-x x w (- px)) (+ pos-y y h (- py))]))
+    [(+ pos-x x neg-pivot-x) (+ pos-y y neg-pivot-y)
+     (+ pos-x x w neg-pivot-x) (+ pos-y y h neg-pivot-y)]))
 
 (defn update-container-handle!
   [container xhandle yhandle]
