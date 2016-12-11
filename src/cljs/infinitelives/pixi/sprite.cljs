@@ -1,7 +1,8 @@
 (ns infinitelives.pixi.sprite
   (:require [cljsjs.pixi]
             [infinitelives.utils.vec2 :as vec2]
-            [infinitelives.pixi.texture :as texture]))
+            [infinitelives.pixi.texture :as texture]
+            [infinitelives.utils.console :refer [log]]))
 
 (def ^:dynamic *default-scale* 1)
 (defn get-default-scale [] *default-scale*)
@@ -221,6 +222,28 @@
     (when-not (= 1 alpha)
       (set! (.-alpha container) alpha))
     (when tint (set! (.-tint container) tint))
+
+    (set! (.-interactive container) (or mousemove mousedown mouseup mouseupoutside
+                                        touchmove touchdown touchup touchupoutside))
+    (set! (.-interactiveChildren container) (or mousemove mousedown mouseup mouseupoutside
+                                touchmove touchdown touchup touchupoutside))
+
+    (set! (.-hitArea container) (new js/PIXI.Rectangle 0 0 1000 1000))
+
+    (when mousedown
+      (.log js/console "md")
+      (set! (.-mousedown container) mousedown))
+    (when mousemove (set! (.-mousemove container) mousemove))
+    (when mouseup (set! (.-mouseup container) mouseup))
+    (when mouseupoutside (set! (.-mouseupoutside container) mouseupoutside))
+
+    (when touchdown (set! (.-touchdown container) touchdown))
+    (when touchmove (set! (.-touchmove container) touchmove))
+    (when touchup (set! (.-touchup container) touchup))
+    (when touchupoutside (set! (.-touchupoutside container) touchupoutside))
+
+    (when-not (nil? buttonmode) (set! (.-buttonMode container) buttonmode))
+
 
     (doseq [child children] (.addChild container child))
     (when (pos? (count children))
