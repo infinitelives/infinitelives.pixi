@@ -252,4 +252,5 @@
     container))
 
 (defn container-transform [container pos]
-  (.applyInverse (.-worldTransform container) pos))
+  (let [p (.applyInverse (.-worldTransform container) pos)]
+    [(.-x p) (.-y p)]))
