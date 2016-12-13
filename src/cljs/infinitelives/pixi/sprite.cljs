@@ -250,3 +250,6 @@
       (update-handle! container xhandle yhandle))
 
     container))
+
+(defn container-transform [container pos]
+  (.applyInverse (.-worldTransform container) pos))
