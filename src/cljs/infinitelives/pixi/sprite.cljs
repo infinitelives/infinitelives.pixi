@@ -223,15 +223,15 @@
       (set! (.-alpha container) alpha))
     (when tint (set! (.-tint container) tint))
 
-    (set! (.-interactive container) (or mousemove mousedown mouseup mouseupoutside
-                                        touchmove touchdown touchup touchupoutside))
-    (set! (.-interactiveChildren container) (or mousemove mousedown mouseup mouseupoutside
-                                touchmove touchdown touchup touchupoutside))
+    (set! (.-interactive container) (boolean (or mousemove mousedown mouseup mouseupoutside
+                                                 touchmove touchdown touchup touchupoutside)))
+    (set! (.-interactiveChildren container) (boolean (or mousemove mousedown mouseup mouseupoutside
+                                                         touchmove touchdown touchup touchupoutside)))
 
     (set! (.-hitArea container) (new js/PIXI.Rectangle 0 0 1000 1000))
 
+
     (when mousedown
-      (.log js/console "md")
       (set! (.-mousedown container) mousedown))
     (when mousemove (set! (.-mousemove container) mousemove))
     (when mouseup (set! (.-mouseup container) mouseup))
