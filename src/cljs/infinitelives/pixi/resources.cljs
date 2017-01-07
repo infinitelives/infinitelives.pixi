@@ -142,7 +142,7 @@
         (when (pos? i) (recur (dec i)))))))
 
 (defn load-resources [canvas layer urls & {:keys [fade-in fade-out]
-                      :or {fade-in 0.5 fade-out 0.5}
+                      :or {fade-in 0.01 fade-out 0.01}
                       :as options}]
   (let [b (add-prog-bar (m/get-layer canvas layer) options)]
     (go
