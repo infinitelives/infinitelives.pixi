@@ -195,7 +195,7 @@
               x y xhandle yhandle scale alpha
               rotation tint visible
               mousemove mousedown mouseup mouseupoutside
-              touchmove touchdown touchup touchupoutside
+              touchmove touchstart touchup touchupoutside
               buttonmode particle particle-opts]
        :or {children []
             x 0 y 0
@@ -224,9 +224,9 @@
     (when tint (set! (.-tint container) tint))
 
     (set! (.-interactive container) (boolean (or mousemove mousedown mouseup mouseupoutside
-                                                 touchmove touchdown touchup touchupoutside)))
+                                                 touchmove touchstart touchup touchupoutside)))
     (set! (.-interactiveChildren container) (boolean (or mousemove mousedown mouseup mouseupoutside
-                                                         touchmove touchdown touchup touchupoutside)))
+                                                         touchmove touchstart touchup touchupoutside)))
 
     (set! (.-hitArea container) (new js/PIXI.Rectangle 0 0 1000 1000))
 
@@ -237,7 +237,7 @@
     (when mouseup (set! (.-mouseup container) mouseup))
     (when mouseupoutside (set! (.-mouseupoutside container) mouseupoutside))
 
-    (when touchdown (set! (.-touchdown container) touchdown))
+    (when touchstart (set! (.-touchstart container) touchstart))
     (when touchmove (set! (.-touchmove container) touchmove))
     (when touchup (set! (.-touchup container) touchup))
     (when touchupoutside (set! (.-touchupoutside container) touchupoutside))
