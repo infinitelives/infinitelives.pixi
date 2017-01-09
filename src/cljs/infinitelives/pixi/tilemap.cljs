@@ -43,7 +43,28 @@
          :particle true
          opts))
 
-(defn alter-tile! [sprite-set coord tile-set texture-key]
+
+(defn alter-tile! [layer sprite-set coord tile-set texture-key]
+  (assert (sprite-set coord) (str "Trying to alter position " coord " where no tile is placed is forbidden"))
   (set!
    (.-texture (sprite-set coord))
-   (-> tile-set :texture-map texture-key)))
+   (-> tile-set :texture-map texture-key))
+  sprite-set)
+
+(defn add-tile! [layer sprite-set coord tile-set texture-key]
+  (assert (not (sprite-set coord)) (str "Can only add a new tile to an empty position. Coord " coord " already has tile " (sprite-set coord)))
+  (let [tile-width 16
+        tile-height 16
+        [col row] coord
+        new-sprite (s/make-sprite (-> tile-set :texture-map texture-key)
+                                  :x (* tile-width col) :y (* tile-height row)
+                                  :xhandle 0 :yhandle 0)]
+    (.addChild layer new-sprite)
+    (assoc sprite-set coord new-sprite)))
+
+(defn change-tile! [layer sprite-set coord tile-set texture-key]
+  (if (sprite-set coord)
+    (alter-tile! layer sprite-set coord tile-set texture-key)
+    (add-tile! layer sprite-set coord tile-set texture-key)
+)
+)
