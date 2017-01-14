@@ -9,6 +9,9 @@
   [key texture]
   (swap! !texture-store assoc key texture))
 
+;; backwards compatability
+(def set-texture! add!)
+
 (defn remove!
   "Remove the texture keyed as `key` from the
   texture cache"
