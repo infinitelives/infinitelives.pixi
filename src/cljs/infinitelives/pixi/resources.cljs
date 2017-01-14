@@ -20,24 +20,24 @@
 
 (defn progress-texture
   "Draws an empty box that can serve as a default progress bar for preloading images"
-  [fraction {:keys [empty-colour full-colour
-                    border-colour border-width draw-border
-                    width height
-                    highlight highlight-offset highlight-width
-                    lowlight lowlight-offset lowlight-width]
-             :or {empty-colour 0x000000
-                  full-colour 0x808080
-                  border-colour 0xffffff
-                  border-width 2
-                  draw-border false
-                  width 600
-                  height 40
-                  highlight-offset 0
-                  highlight-width 1
-                  lowlight-offset 0
-                  lowlight-width 1
-                  }
-             :as options}]
+  [renderer fraction {:keys [empty-colour full-colour
+                             border-colour border-width draw-border
+                             width height
+                             highlight highlight-offset highlight-width
+                             lowlight lowlight-offset lowlight-width]
+                      :or {empty-colour 0x000000
+                           full-colour 0x808080
+                           border-colour 0xffffff
+                           border-width 2
+                           draw-border false
+                           width 600
+                           height 40
+                           highlight-offset 0
+                           highlight-width 1
+                           lowlight-offset 0
+                           lowlight-width 1
+                           }
+                      :as options}]
   (let [box (js/PIXI.Graphics.)]
     (doto box
       (.beginFill empty-colour)
@@ -56,10 +56,10 @@
       (when (> bw 0)
         (when highlight
           (doto box
-              (.lineStyle highlight-width highlight)
-              (.moveTo x1 y2)
-              (.lineTo x1 y1)
-              (.lineTo x2 y1)))
+            (.lineStyle highlight-width highlight)
+            (.moveTo x1 y2)
+            (.lineTo x1 y1)
+            (.lineTo x2 y1)))
         (when lowlight
           (doto box
             (.lineStyle lowlight-width lowlight)
@@ -74,8 +74,8 @@
 
     (.generateTexture box false)))
 
-(defn add-prog-bar [stage options]
-  (let [s (sprite/make-sprite (progress-texture 0 options)
+(defn add-prog-bar [renderer stage options]
+  (let [s (sprite/make-sprite (progress-texture renderer 0 options)
                               :scale (get options :scale sprite/*default-scale*))]
     (set! (.-alpha s) 0)
     (.addChild stage s)
@@ -141,10 +141,10 @@
         (set! (.-alpha spr) (+ start (* (- end start) (/ (- ticks i) ticks))))
         (when (pos? i) (recur (dec i)))))))
 
-(defn load-resources [canvas layer urls & {:keys [fade-in fade-out]
-                      :or {fade-in 0.01 fade-out 0.01}
-                      :as options}]
-  (let [b (add-prog-bar (m/get-layer canvas layer) options)]
+(defn load-resources [{:keys [renderer] :as canvas} layer urls & {:keys [fade-in fade-out]
+                                              :or {fade-in 0.01 fade-out 0.01}
+                                                                  :as options}]
+  (let [b (add-prog-bar renderer (m/get-layer canvas layer) options)]
     (go
       ;; fade in
       (<! (fadein b :duration fade-in))
@@ -153,7 +153,7 @@
       (let [coll (<! (resources/load-urls urls
                       (fn [i num-urls url obj]
                         (set! (.-texture b)
-                              (progress-texture (/ i num-urls) options)))))]
+                              (progress-texture renderer (/ i num-urls) options)))))]
 
         ;; fadeout
         (<! (fadeout b :duration fade-out))
