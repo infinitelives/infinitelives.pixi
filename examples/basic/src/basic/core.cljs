@@ -15,7 +15,7 @@
   (go
     (<! (r/load-resources canvas :bg ["img/bunny.png"]))
 
-    (t/set-texture! :rabbit (r/get-texture :bunny :nearest))
+    (t/add! :rabbit (r/get-texture :bunny :nearest))
 
     (m/with-sprite canvas :bg
       [rabbit (s/make-sprite :rabbit)]
