@@ -21,20 +21,30 @@
 
 (defn make-tile-sprites [{texture-map :texture-map
                           [tile-width tile-height] :tile-size}
-                         tile-map]
+                         tile-map
+                         & {:keys [xoffset yoffset] :or {xoffset 0 yoffset 0}}
+                         ]
   (into
    {}
    (filter identity
            (for [row (range (count tile-map))
                  col (range (count (first tile-map)))]
              (let [char (nth (tile-map row) col)]
-               (when char [[col row]
+               (when char [[(+ xoffset col) (+ yoffset row)]
                            (s/make-sprite (texture-map char)
-                                          :x (* tile-width col) :y (* tile-height row)
+                                          :x (* tile-width (+ xoffset col)) :y (* tile-height (+ yoffset row))
                                           :xhandle 0 :yhandle 0)]))))))
 
-(defn make-tile-map [tile-mapping tile-map-chars]
-  (strs->keymap tile-mapping tile-map-chars))
+(defn make-tile-map [tile-mapping tile-map-chars & {:keys [xoffset yoffset] :or {xoffset 0 yoffset 0}}]
+  (let [orig
+        (strs->keymap tile-mapping tile-map-chars)
+        height (count orig)
+        width (count (first orig))
+        empty-line (into [] (repeat width nil))
+        padded (concat (repeat yoffset empty-line) orig)
+        padded2 (for [line padded] (concat (repeat xoffset nil) line))
+        ]
+    (mapv vec padded2)))
 
 (defn make-tilemap [sprite-set & opts]
   (apply s/make-container
