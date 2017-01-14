@@ -4,27 +4,42 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
-  :dependencies [[org.clojure/clojure "1.7.0"]
-                 [org.clojure/clojurescript "1.7.170"]
-                 [org.clojure/core.async "0.2.374"
+  :dependencies [[org.clojure/clojure "1.8.0"]
+                 [org.clojure/clojurescript "1.9.229"]
+                 [org.clojure/core.async "0.2.391"
                   :exclusions [org.clojure/tools.reader]]
 
                  [infinitelives/infinitelives.pixi "0.1.1-SNAPSHOT"]
                  ]
 
-  :plugins [[lein-cljsbuild "1.1.2" :exclusions [[org.clojure/clojure]]]
-            [lein-figwheel "0.5.0-4"]]
+  :plugins [[lein-figwheel "0.5.8"]
+            [lein-cljsbuild "1.1.4" :exclusions [[org.clojure/clojure]]]
+            ]
 
-  :source-paths ["src"]
+  :source-paths ["src"
+                  "checkouts/infinitelives.utils/src"
+                 "checkouts/infinitelives.pixi/src"
+
+                 ]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
   :cljsbuild {:builds
               [{:id "dev"
-                :source-paths ["src"]
+                :source-paths ["src"
+                               "checkouts/infinitelives.utils/src"
+                               "checkouts/infinitelives.pixi/src"
+
+                               ]
 
                 ;; If no code is to be run, set :figwheel true for continued automagical reloading
-                :figwheel {:on-jsload "basic.core/on-js-reload"}
+                :figwheel {:on-jsload "basic.core/on-js-reload"
+                           ;; :open-urls will pop open your application
+                           ;; in the default browser once Figwheel has
+                           ;; started and complied your application.
+                           ;; Comment this out once it no longer serves you.
+                           :open-urls ["http://localhost:3449/index.html"]
+                           }
 
                 :compiler {:main basic.core
                            :asset-path "js/compiled/out"
@@ -35,7 +50,11 @@
                ;; production. You can build this with:
                ;; lein cljsbuild once min
                {:id "min"
-                :source-paths ["src"]
+                :source-paths ["src"
+                               "checkouts/infinitelives.utils/src"
+                               "checkouts/infinitelives.pixi/src"
+
+                               ]
                 :compiler {:output-to "resources/public/js/compiled/basic.js"
                            :main basic.core
                            :optimizations :advanced
