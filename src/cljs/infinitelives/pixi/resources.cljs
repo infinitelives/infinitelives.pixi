@@ -83,9 +83,13 @@
 
 (defn get-texture
   ([key scale]
-   (scale (get @!texture-store key)))
+   (scale (or (get @!texture-store key)
+              (throw (js/Error. (str "Texture " key " not loaded"))))))
   ([key]
-   (get-texture key :nearest)))
+   (or
+    (get-texture key :nearest)
+    (throw (js/Error. (str "Texture " key " not loaded")))
+    )))
 
 ;; setup a pixi texture cache keyed by the tail of its filename
 (defn- register!
