@@ -199,7 +199,7 @@
               buttonmode particle particle-opts]
        :or {children []
             x 0 y 0
-            xhandle 0.5 yhandle 0.5
+            xhandle nil yhandle nil
             scale 1
             alpha 1
             visible true
@@ -246,8 +246,8 @@
 
 
     (doseq [child children] (.addChild container child))
-    (when (pos? (count children))
-      (update-handle! container xhandle yhandle))
+    (when (and (or xhandle yhandle) (pos? (count children)))
+         (update-handle! container (or xhandle 0) (or yhandle 0)))
 
     container))
 
