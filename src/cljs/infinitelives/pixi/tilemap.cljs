@@ -2,6 +2,7 @@
   (:require [infinitelives.pixi.resources :as r]
             [infinitelives.pixi.texture :as t]
             [infinitelives.pixi.sprite :as s]
+            [infinitelives.utils.vec2 :as vec2]
             [infinitelives.utils.console :refer [log]]
 )
   )
@@ -78,3 +79,31 @@
     (add-tile! layer sprite-set coord tile-set texture-key)
 )
 )
+
+(defn tile-pos->pixel-pos [{[w h] :tile-size} pos]
+  (let [x (vec2/get-x pos)
+        y (vec2/get-y pos)
+        ]
+    (vec2/vec2 (* w (+ 0.5 x))
+               (* h (+ 0.5 y)))))
+
+(defn pixel-pos->tile-pos [{[w h] :tile-size} pos]
+  (let [x (vec2/get-x pos)
+        y (vec2/get-y pos)
+        ]
+    (vec2/vec2 (/ (+ -0.5 x) w)
+               (/ (+ -0.5 y) h))))
+
+(defn pixel-pos->tile-pos2 [{[w h] :tile-size} pos]
+  (let [x (vec2/get-x pos)
+        y (vec2/get-y pos)
+        ]
+    (vec2/vec2 (/ x w)
+               (/ y h))))
+
+(defn tile-pos->pixel-pos2 [{[w h] :tile-size} pos]
+  (let [x (vec2/get-x pos)
+        y (vec2/get-y pos)
+        ]
+    (vec2/vec2 (* w x)
+               (* h y))))
