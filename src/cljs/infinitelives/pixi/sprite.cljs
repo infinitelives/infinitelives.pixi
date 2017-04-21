@@ -106,6 +106,10 @@
   ([sprite sx sy]
    (set! (.-scale sprite) (make-point sx sy))))
 
+(defn get-scale [sprite]
+  (let [scale (.-scale sprite)]
+    [(.-x scale) (.-y scale)]))
+
 (defn set-rotation! [sprite theta]
   (set! (.-rotation sprite) theta))
 
