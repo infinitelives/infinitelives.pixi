@@ -25,16 +25,20 @@
                          tile-map
                          & {:keys [xoffset yoffset] :or {xoffset 0 yoffset 0}}
                          ]
-  (into
-   {}
-   (filter identity
-           (for [row (range (count tile-map))
-                 col (range (count (first tile-map)))]
-             (let [char (nth (tile-map row) col)]
-               (when char [[(+ xoffset col) (+ yoffset row)]
-                           (s/make-sprite (texture-map char)
-                                          :x (* tile-width (+ xoffset col)) :y (* tile-height (+ yoffset row))
-                                          :xhandle 0 :yhandle 0)]))))))
+  (let [tmarray (to-array-2d tile-map)]
+    (into
+     {}
+     (filter identity
+             (for [row (range (count tile-map))
+                   col (range (count (first tile-map)))]
+               (let [char
+                     (aget tmarray row col)
+                     ;(nth (tile-map row) col)
+                     ]
+                 (when char [[(+ xoffset col) (+ yoffset row)]
+                             (s/make-sprite (texture-map char)
+                                            :x (* tile-width (+ xoffset col)) :y (* tile-height (+ yoffset row))
+                                            :xhandle 0 :yhandle 0)])))))))
 
 (defn make-tile-map [tile-mapping tile-map-chars & {:keys [xoffset yoffset] :or {xoffset 0 yoffset 0}}]
   (let [orig
