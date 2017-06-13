@@ -197,13 +197,13 @@
 
 (defn make-container
   [ & {:keys [children
-              x y xhandle yhandle scale alpha
+              x y xhandle yhandle scale alpha pos
               rotation tint visible
               mousemove mousedown mouseup mouseupoutside
               touchmove touchstart touchup touchupoutside
               buttonmode particle particle-opts]
        :or {children []
-            x 0 y 0
+            pos (vec2/vec2 0 0)
             xhandle nil yhandle nil
             scale 1
             alpha 1
@@ -215,8 +215,13 @@
           (js/PIXI.particles.ParticleContainer. nil (opts->js particle-opts))
           (js/PIXI.Container.))]
     (assert container "creation of container failed and returned nil")
-    (set! (.-x container) x)
-    (set! (.-y container) y)
+    (when pos
+      (set! (.-x container) (vec2/get-x pos))
+      (set! (.-y container) (vec2/get-y pos)))
+    (when x
+      (set! (.-x container) x))
+    (when y
+      (set! (.-y container) y))
     (set! (.-rotation container) rotation)
     (set! (.-visible container) visible)
     (when-not (= scale 1)
@@ -226,14 +231,15 @@
               (make-point (get scale 0) (get scale 1)))))
     (when-not (= 1 alpha)
       (set! (.-alpha container) alpha))
-    (when tint (set! (.-tint container) tint))
+    (when tint
+      (set! (.-tint container) tint))
 
-    (set! (.-interactive container) (boolean (or mousemove mousedown mouseup mouseupoutside
+    (set! (.-interactive container) (boolean (or interactive mousemove mousedown mouseup mouseupoutside
                                                  touchmove touchstart touchup touchupoutside)))
-    (set! (.-interactiveChildren container) (boolean (or mousemove mousedown mouseup mouseupoutside
+    (set! (.-interactiveChildren container) (boolean (or interactive mousemove mousedown mouseup mouseupoutside
                                                          touchmove touchstart touchup touchupoutside)))
 
-    (set! (.-hitArea container) (new js/PIXI.Rectangle 0 0 1000 1000))
+    (set! (.-hitArea container) (new js/PIXI.Rectangle -1000 -1000 2000 2000))
 
 
     (when mousedown
@@ -246,6 +252,7 @@
     (when touchmove (set! (.-touchmove container) touchmove))
     (when touchup (set! (.-touchup container) touchup))
     (when touchupoutside (set! (.-touchupoutside container) touchupoutside))
+
 
     (when-not (nil? buttonmode) (set! (.-buttonMode container) buttonmode))
 
