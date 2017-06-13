@@ -186,7 +186,7 @@
     ([container xhandle yhandle]
      (update-container-handle! container xhandle yhandle))))
 
-(extend-type js/PIXI.ParticleContainer
+(extend-type js/PIXI.particles.ParticleContainer
   Container
   (update-handle!
     ([container xhandle yhandle]
@@ -212,7 +212,7 @@
             particle-opts #{:position}}}]
   (let [container
         (if particle
-          (js/PIXI.ParticleContainer. nil (opts->js particle-opts))
+          (js/PIXI.particles.ParticleContainer. nil (opts->js particle-opts))
           (js/PIXI.Container.))]
     (assert container "creation of container failed and returned nil")
     (set! (.-x container) x)
