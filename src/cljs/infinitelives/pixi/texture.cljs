@@ -47,5 +47,6 @@
   }
   "
   [texture asset-description]
+  (assert texture "texture is unset")
   (swap! !texture-store into (for [[key {:keys [pos size]}] asset-description]
                               [key (sub-texture texture pos size)])))
