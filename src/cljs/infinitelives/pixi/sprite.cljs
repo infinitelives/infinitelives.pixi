@@ -15,12 +15,12 @@
 
 (defn make-sprite
   "construct a sprite by its texture. optionally pass in other things"
-  [texture & {:keys [x y xhandle yhandle scale alpha
+  [texture & {:keys [x y xhandle yhandle scale alpha pos
                      rotation tint tiling tiling-width tiling-height visible
                      mousemove mousedown mouseup mouseupoutside
                      touchmove touchdown touchup touchupoutside
                      buttonmode]
-              :or {x 0 y 0
+              :or {pos (vec2/vec2 0 0)
                    xhandle 0.5 yhandle 0.5
                    scale *default-scale*
                    alpha 1
@@ -34,8 +34,13 @@
             (js/PIXI.Sprite. (if (keyword? texture) (texture/get-texture texture) texture)))]
     (assert s "creation of sprite failed and returned nil")
     (set! (.-anchor s) (make-point xhandle yhandle))
-    (set! (.-x s) x)
-    (set! (.-y s) y)
+    (when pos
+      (set! (.-x s) (vec2/get-x pos))
+      (set! (.-y s) (vec2/get-y pos)))
+    (when x
+      (set! (.-x s) x))
+    (when y
+      (set! (.-y s) y))
     (set! (.-rotation s) rotation)
     (set! (.-visible s) visible)
     (when-not (= scale 1)
