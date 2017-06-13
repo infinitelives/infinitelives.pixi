@@ -88,7 +88,7 @@
   (add-text! batch font-key text :tint tint))
 
 (defn make-text [font-key text & {:keys [tint scale anchor rotation
-                                         x y visible
+                                         x y pos visible
                                          xhandle yhandle]
                                   :or {scale s/*default-scale*
                                        visible true
@@ -99,6 +99,7 @@
    :particle (not tint)
    :scale scale
    :rotation rotation
+   :pos pos
    :x x
    :y y
    :visible visible
@@ -106,7 +107,7 @@
    :yhandle yhandle))
 
 (defn appear-text [font-key text & {:keys [tint scale anchor rotation
-                                           x y visible
+                                           x y visible pos
                                            xhandle yhandle
                                            delay]
                                     :or {scale s/*default-scale*
@@ -120,6 +121,7 @@
          :particle (not tint)
          :scale scale
          :rotation rotation
+         :pos pos
          :x x
          :y y
          :visible visible
