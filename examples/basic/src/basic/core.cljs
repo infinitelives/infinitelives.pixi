@@ -9,7 +9,7 @@
                      [infinitelives.pixi.macros :as m]))
 
 (defonce canvas
-  (c/init {:layers [:bg] :background 0x1099bb}))
+  (c/init {:layers [:bg] :background 0x1099bb :engine :canvas}))
 
 (defonce main-thread
   (go

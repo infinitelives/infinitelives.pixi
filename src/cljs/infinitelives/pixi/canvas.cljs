@@ -5,6 +5,9 @@
             [infinitelives.utils.events :as events]
             [infinitelives.utils.dom :as dom]
             [infinitelives.utils.console :refer [log]]
+            [goog.events :as ev]
+            [goog.events.EventType :as event-type]
+            [goog.dom.fullscreen.EventType :as fullscreen-event-type]
             [cljsjs.pixi])
 
   (:require-macros [cljs.core.async.macros :refer [go]])
@@ -82,7 +85,11 @@
         (dom/set-style! actual-canvas
                         :left (if expand 0 x)
                         :top (if expand 0 y)
-                        :position "absolute")
+                        :position "absolute"
+                        :-webkit-user-select "none"
+                        :-moz-user-select "none"
+                        :user-select "none"
+                        )
         (dom/append! (.-body js/document) actual-canvas)))
 
     (let [wind-width (if expand fswidth canvas-width)
@@ -246,23 +253,25 @@
           ;; remember: fullscreen call will only work when
           ;; its called from a gesture. Like an on-click.
           fullscreen-fn (fn [fullscreen]
+                          (js/console.log "FULLSCREEN" fullscreen)
                           (if fullscreen
                             (cond
-                              (.-requestFullscreen canvas)
-                              (.requestFullscreen canvas)
+                              (.-requestFullscreen (.-body js/document))
+                              (.requestFullscreen (.-body js/document))
 
-                              (.-webkitRequestFullscreen canvas)
-                              (.webkitRequestFullscreen canvas)
+                              (.-webkitRequestFullscreen (.-body js/document))
+                              (.webkitRequestFullscreen (.-body js/document))
 
-                              (.-mozRequestFullScreen canvas)
-                              (.mozRequestFullScreen canvas))
+                              (.-mozRequestFullScreen (.-body js/document))
+                              (.mozRequestFullScreen (.-body js/document)))
 
-                            (cond
+                            (.webkitCancelFullScreen js/document)
+                            #_ (cond
                               (.-exitFullscreen js/document)
                               (.exitFullscreen js/document)
 
-                              (.-webkitExitFullscreen js/document)
-                              (.webkitExitFullscreen js/document)
+                              (.-webkitCancelFullscreen js/document)
+                              (.webkitCancelFullscreen js/document)
 
                               (.-msExitFullscreen js/document)
                               (.msExitFullscreen js/document)
@@ -302,14 +311,73 @@
 
         canvas))))
 
-(defn add-fullscreen-button! [{:keys [fullscreen-fn]}]
+(defn add-fullscreen-button!
+  [{:keys [fullscreen-fn]} &
+   {:keys [expand-image
+           contract-image
+           border
+           corner
+           fullscreen-callback]
+    :or {expand-image "http://runrunitshim.com/images/fullscreenIcon.png"
+         border [0 0]
+         corner :bottom-right
+         }}]
+
   (let [div (dom/create-element :div)
-        img (dom/create-element :img)]
+        img (dom/create-element :img)
+        [x y] border]
     (dom/append! div img)
-    (set! (.-src img) "http://runrunitshim.com/images/fullscreenIcon.png")
-    (.setAttribute img "style" "bottom: 0; position: absolute; padding-bottom: 0px; padding-left: 0px; z-index: 200;")
-    (.setAttribute div "style" "bottom: 0; position: absolute; padding-bottom: 0px; padding-left: 0px; z-index: 200;")
-    (.addEventListener img "click" #(fullscreen-fn true))
+    (set! (.-src img) expand-image)
+    (let [style (case corner
+                  :bottom-left
+                  (str "bottom: 0; position: absolute; padding-bottom: "
+                       y "px; padding-left: " x
+                       "px; z-index: 200; user-select: none;")
+
+                  :bottom-right
+                  (str "bottom: 0; right: 0; position: absolute; padding-bottom: "
+                       y "px; padding-right: " x
+                       "px; z-index: 200;"
+                       "user-drag: none; user-select: none; -moz-user-select: none;"
+                       "-webkit-user-drag: none; -webkit-user-select: none; -ms-user-select: none;")
+                  )]
+      (.setAttribute img "style" style)
+      (.setAttribute div "style" style)
+      )
+    (.addEventListener img "click"
+                       #(do
+                          (js/console.log "FSCH"  (.-webkitIsFullScreen js/document)
+                                          (.-mozFullScreen js/document)
+                                          (.-msFullscreenElement js/document))
+                          (if (not (or (.-webkitIsFullScreen js/document)
+                                       (.-mozFullScreen js/document)
+                                       (.-msFullscreenElement js/document)))
+                            (do
+                              (js/console.log "EXPAND")
+                              (fullscreen-fn true)
+                              (set! (.-src img) contract-image))
+
+                            (do
+                              (js/console.log "CONTRACT")
+                              (fullscreen-fn false)
+                              (set! (.-src img) expand-image))
+                            )
+
+                          (when fullscreen-callback
+                            (fullscreen-callback))
+
+                          (.stopPropagation %)
+                          ))
+    (ev/listen js/window fullscreen-event-type/CHANGE
+               (fn [ev]
+                 (if  (or (.-webkitIsFullScreen js/document)
+                          (.-mozFullScreen js/document)
+                          (.-msFullscreenElement js/document))
+                   (set! (.-src img) contract-image)
+                   (set! (.-src img) expand-image)
+
+                   ))
+               )
+
     (dom/append! (.-body js/document) div)
-    div
-    ))
+    div))

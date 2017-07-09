@@ -13,7 +13,8 @@
 (defonce canvas
   (c/init {:layers [:bg]
            :background 0x404070
-           :expand true}))
+           :expand true
+           :engine :webgl}))
 
 (defonce main-thread
   (go
@@ -29,9 +30,10 @@
 
     (m/with-sprite canvas :bg
       [text (pf/make-text :big "The quick brown fox jumped over the lazy sequence!"
-                          :tint 0xb0c0ff
+                          :tint 0xff0000
                           :scale 3
                           :rotation 0
+                          :engine :canvas
                           )]
       (loop [f 0]
         (s/set-rotation! text (* 0.002 f))

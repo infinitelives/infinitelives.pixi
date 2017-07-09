@@ -18,6 +18,62 @@
 ;; textures set to those filtering modes
 (defonce !texture-store (atom {}))
 
+(defn progress-texture-box
+  "Draws an empty box that can serve as a default progress bar for preloading images"
+  [box fraction {:keys [empty-colour full-colour
+                             border-colour border-width draw-border
+                             width height
+                             highlight highlight-offset highlight-width
+                             lowlight lowlight-offset lowlight-width]
+                      :or {empty-colour 0x000000
+                           full-colour 0x808080
+                           border-colour 0xffffff
+                           border-width 2
+                           draw-border false
+                           width 600
+                           height 40
+                           highlight-offset 0
+                           highlight-width 1
+                           lowlight-offset 0
+                           lowlight-width 1
+                           }
+                      :as options}]
+  (doto box
+    (.beginFill empty-colour)
+    (.lineStyle 0 border-colour)
+    (.drawRect 0 0 width height)
+    (.lineStyle 0 border-colour)
+    (.beginFill full-colour)
+    (.drawRect border-width border-width (* (if (< fraction 1) fraction 1) (- width border-width border-width)) (- height border-width border-width ))
+    .endFill)
+
+  (let [bw (* (if (< fraction 1) fraction 1) width)
+        x1 (+ border-width highlight-offset)
+        x2 (- bw highlight-offset)
+        y1 (+ border-width lowlight-offset)
+        y2 (- height border-width lowlight-offset)]
+    (when (> bw 0)
+      (when highlight
+        (doto box
+          (.lineStyle highlight-width highlight)
+          (.moveTo x1 y2)
+          (.lineTo x1 y1)
+          (.lineTo x2 y1)))
+      (when lowlight
+        (doto box
+          (.lineStyle lowlight-width lowlight)
+          (.moveTo x1 y2)
+          (.lineTo x2 y2)
+          (.lineTo x2 y1)))))
+
+  (when draw-border
+    (doto box
+      (.lineStyle border-width border-colour)
+      (.drawRect 0 0 width height)))
+
+  box
+    )
+
 (defn progress-texture
   "Draws an empty box that can serve as a default progress bar for preloading images"
   [renderer fraction {:keys [empty-colour full-colour
@@ -72,7 +128,9 @@
         (.lineStyle border-width border-colour)
         (.drawRect 0 0 width height)))
 
-    (.generateTexture box false)))
+                                        ;(.generateTexture box false)
+    (.generateTexture renderer box js/PIXI.SCALE_MODES.LINEAR 1)
+    ))
 
 (defn add-prog-bar [renderer stage options]
   (let [s (sprite/make-sprite (progress-texture renderer 0 options)

@@ -93,7 +93,8 @@
                                   :or {scale s/*default-scale*
                                        visible true
                                        xhandle 0.5
-                                       yhandle 0.5}}]
+                                       yhandle 0.5
+                                       tint 0xffffff}}]
   (s/make-container
    :children (make-char-sprite-set font-key text :tint tint)
    :particle (not tint)

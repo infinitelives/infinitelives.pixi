@@ -199,6 +199,7 @@
   [ & {:keys [children
               x y xhandle yhandle scale alpha pos
               rotation tint visible
+              interactive
               mousemove mousedown mouseup mouseupoutside
               touchmove touchstart touchup touchupoutside
               buttonmode particle particle-opts]
