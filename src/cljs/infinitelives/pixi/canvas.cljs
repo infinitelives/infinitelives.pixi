@@ -9,9 +9,13 @@
             [goog.events.EventType :as event-type]
             [goog.dom.fullscreen.EventType :as fullscreen-event-type]
             [cljsjs.pixi])
-
-  (:require-macros [cljs.core.async.macros :refer [go]])
-)
+  (:require-macros [cljs.core.async.macros :refer [go]]
+                   [infinitelives.pixi.canvas :refer
+                    [get-layer
+                     with-sprite* with-sprite
+                     with-layered-sprite
+                     with-sprite-set* with-sprite-set
+                     while-let]]))
 
 (def ^:dynamic *default-canvas* nil)
 (defn get-default-canvas [] *default-canvas*)
