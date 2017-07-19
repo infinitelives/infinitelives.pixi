@@ -9,7 +9,7 @@
                  [org.clojure/core.async "0.2.391"
                   :exclusions [org.clojure/tools.reader]]
 
-                 [infinitelives/infinitelives.pixi "0.1.1-SNAPSHOT"]
+                 [infinitelives/infinitelives.pixi "0.1.2-SNAPSHOT"]
                  ]
 
   :plugins [[lein-figwheel "0.5.8"]
