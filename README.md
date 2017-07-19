@@ -117,7 +117,7 @@ Now you can use these registered textures in sprites:
 
 ```clojure
 
-(macros/with-sprite canvas :world    ;; the canvas and layer the sprite should be on
+(canvas/with-sprite canvas :world    ;; the canvas and layer the sprite should be on
   ;; now name -> sprite binding pairs in a vector
   [ground (sprite/make-sprite
   	    :ground-1
@@ -173,7 +173,7 @@ to jump for a space character (or any character not found in the font).
 You make text from a font just like a sprite:
 
 ```clojure
-(m/with-sprite canvas :bg
+(c/with-sprite canvas :bg
    [text (pf/make-text :big "The quick brown fox jumped over the lazy sequence!"
                        :tint 0xb0c0ff
                        :scale 3
@@ -198,8 +198,7 @@ Here is a complete port of the spinning bunny from the intro example to pixi.js 
               [infinitelives.pixi.texture :as t]
               [infinitelives.pixi.sprite :as s]
               [cljs.core.async :refer [<!]])
-    (:require-macros [cljs.core.async.macros :refer [go]]
-                     [infinitelives.pixi.macros :as m]))
+    (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (defonce canvas
   (c/init {:layers [:bg] :background 0x1099bb}))
@@ -210,7 +209,7 @@ Here is a complete port of the spinning bunny from the intro example to pixi.js 
 
     (t/set-texture! :rabbit (r/get-texture :bunny :nearest))
 
-    (m/with-sprite canvas :bg
+    (c/with-sprite canvas :bg
       [rabbit (s/make-sprite :rabbit)]
       (loop [angle 0]
         (s/set-rotation! rabbit angle)

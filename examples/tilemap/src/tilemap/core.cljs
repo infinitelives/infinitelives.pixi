@@ -3,11 +3,8 @@
              [infinitelives.pixi.resources :as r]
              [infinitelives.pixi.tilemap :as tm]
              [infinitelives.utils.events :as e]
-             [infinitelives.utils.console :refer [log]]
-)
-
-  (:require-macros [cljs.core.async.macros :refer [go]]
-                   [infinitelives.pixi.macros :as m]))
+             [infinitelives.utils.console :refer [log]])
+  (:require-macros [cljs.core.async.macros :refer [go]]))
 
 
 (enable-console-print!)
@@ -118,7 +115,7 @@
                             (tm/make-tile-map key-for)
                             (tm/make-tile-sprites tile-set)
                             )]
-      (m/with-sprite :tilemap
+      (c/with-sprite :tilemap
         [tile-map (tm/make-tilemap tile-sprites
                                    :scale 4
                                    :particle-opts #{:uvs})]

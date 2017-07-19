@@ -7,7 +7,6 @@
             [infinitelives.pixi.pixelfont :as pf]
             [cljs.core.async :refer [<!]])
   (:require-macros [cljs.core.async.macros :refer [go]]
-                   [infinitelives.pixi.macros :as m]
                    [infinitelives.pixi.pixelfont :as pf]))
 
 (defonce canvas
@@ -28,7 +27,7 @@
                    :space 5)
 
 
-    (m/with-sprite canvas :bg
+    (c/with-sprite canvas :bg
       [text (pf/make-text :big "The quick brown fox jumped over the lazy sequence!"
                           :tint 0xff0000
                           :scale 3

@@ -5,8 +5,7 @@
               [infinitelives.pixi.texture :as t]
               [infinitelives.pixi.sprite :as s]
               [cljs.core.async :refer [<!]])
-    (:require-macros [cljs.core.async.macros :refer [go]]
-                     [infinitelives.pixi.macros :as m]))
+    (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (defonce canvas
   (c/init {:layers [:bg] :background 0x1099bb :engine :canvas}))
@@ -17,7 +16,7 @@
 
     (t/add! :rabbit (r/get-texture :bunny :nearest))
 
-    (m/with-sprite canvas :bg
+    (c/with-sprite canvas :bg
       [rabbit (s/make-sprite :rabbit)]
       (loop [angle 0]
         (s/set-rotation! rabbit angle)
