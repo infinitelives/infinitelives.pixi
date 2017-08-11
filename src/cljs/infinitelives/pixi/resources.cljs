@@ -159,7 +159,6 @@
 (defmethod resources/register! "gif" [url texture-hash] (register! url texture-hash))
 (defmethod resources/register! "jpg" [url texture-hash] (register! url texture-hash))
 
-
 (defn load [url]
   (let [c (chan)
         img (js/Image.)]
