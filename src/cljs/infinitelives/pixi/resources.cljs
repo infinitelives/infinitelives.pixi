@@ -8,7 +8,7 @@
             [infinitelives.utils.console :refer [log]]
             [cljs.core.async :refer [chan put! <! >! timeout close!]])
   (:require-macros [cljs.core.async.macros :refer [go]]
-                   [infinitelives.pixi.macros :as m]))
+                   [infinitelives.pixi.canvas :refer [get-layer]]))
 
 ;; where we store all the loaded full textures keyed by name
 ;; The textures stored here are the full loaded image. Sub textures
@@ -205,7 +205,7 @@
 (defn load-resources [{:keys [renderer] :as canvas} layer urls & {:keys [fade-in fade-out]
                                               :or {fade-in 0.01 fade-out 0.01}
                                                                   :as options}]
-  (let [b (add-prog-bar renderer (m/get-layer canvas layer) options)]
+  (let [b (add-prog-bar renderer (get-layer canvas layer) options)]
     (go
       ;; fade in
       (<! (fadein b :duration fade-in))
