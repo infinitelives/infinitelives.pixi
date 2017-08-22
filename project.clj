@@ -8,7 +8,7 @@
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
 
                  ;; depend on utils
-                 [infinitelives/infinitelives.utils "0.1.1-SNAPSHOT"]
+                 [infinitelives/infinitelives.utils "0.1.2-SNAPSHOT"]
 
                  ;; we need pixi
                  [cljsjs/pixi "4.5.3-0"]
