@@ -205,7 +205,7 @@
 (defn load-resources [{:keys [renderer] :as canvas} layer urls & {:keys [fade-in fade-out]
                                               :or {fade-in 0.01 fade-out 0.01}
                                                                   :as options}]
-  (let [b (add-prog-bar renderer (m/get-layer canvas layer) options)]
+  (let [b (add-prog-bar renderer (get-layer canvas layer) options)]
     (go
       ;; fade in
       (<! (fadein b :duration fade-in))
