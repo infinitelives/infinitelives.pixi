@@ -86,6 +86,12 @@
 (defn set-anchor! [sprite x y]
   (set! (.-anchor sprite) (make-point x y)))
 
+(defn set-anchor-x! [sprite x]
+  (set! (.-anchor.x sprite) x))
+
+(defn set-anchor-y! [sprite y]
+  (set! (.-anchor.y sprite) y))
+
 (defn set-alpha! [sprite alpha]
   (set! (.-alpha sprite) alpha))
 
