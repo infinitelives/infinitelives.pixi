@@ -166,9 +166,15 @@
     (set! (.-onload img)
           #(put! c [url
                     {:linear (js/PIXI.Texture.
-                              (js/PIXI.BaseTexture. img js/PIXI.SCALE_MODES.LINEAR))
+                              (js/PIXI.BaseTexture.
+                               img
+                               #js {"scaleMode"
+                                    js/PIXI.SCALE_MODES.LINEAR}))
                      :nearest (js/PIXI.Texture.
-                               (js/PIXI.BaseTexture. img js/PIXI.SCALE_MODES.NEAREST))
+                               (js/PIXI.BaseTexture.
+                                img
+                                #js {"scaleMode"
+                                     js/PIXI.SCALE_MODES.NEAREST}))
                      :image img}
                     ]))
     (set! (.-onerror img) #(put! c [url nil]))

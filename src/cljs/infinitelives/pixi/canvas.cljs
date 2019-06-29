@@ -31,7 +31,6 @@
   Pass in...
 
   :expand        if true makes the canvas take the entire window
-  :engine        can be :webgl :canvas or :auto (default :auto)
   :default       true or false to set the default canvas to this
                  created one. defaults to true.
 
@@ -60,7 +59,10 @@
         ;; arguments for renderer
         wid (if expand fswidth width)
         hig (if expand fsheight height)
-        opts #js {"view" canvas
+        opts #js {
+                  "width" wid
+                  "height" hig
+                  "view" canvas
                   "transparent" false
                   "antialias" false
                   "preserveDrawingBuffer" false
@@ -72,10 +74,7 @@
                   }
 
         ;; make the renderer
-        rend (case engine
-               :webgl (js/PIXI.WebGLRenderer. wid hig opts)
-               :canvas (js/PIXI.CanvasRenderer. wid hig opts)
-               (js/PIXI.autoDetectRenderer. wid hig opts))
+        rend (js/PIXI.Renderer. opts)
 
         ;; details of the generated renderer
         actual-canvas (.-view rend)

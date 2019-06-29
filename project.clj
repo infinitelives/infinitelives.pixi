@@ -11,7 +11,7 @@
                  [infinitelives/infinitelives.utils "0.1.2-SNAPSHOT"]
 
                  ;; we need pixi
-                 [cljsjs/pixi "4.5.3-0"]
+                 [cljsjs/pixi "5.0.4-0"]
 
                  ;; should we depend on this? maybe its better without?
                  [prismatic/dommy "1.1.0"]

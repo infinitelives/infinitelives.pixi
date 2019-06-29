@@ -196,7 +196,7 @@
     ([container xhandle yhandle]
      (update-container-handle! container xhandle yhandle))))
 
-(extend-type js/PIXI.particles.ParticleContainer
+(extend-type js/PIXI.ParticleContainer
   Container
   (update-handle!
     ([container xhandle yhandle]
