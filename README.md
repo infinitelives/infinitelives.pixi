@@ -229,9 +229,18 @@ So that should get you started. Read the source and the doc strings for more. Or
 
 Most recent full game:
 
+https://github.com/retrogradeorbit/otoch
+
+older games:
+
+https://github.com/retrogradeorbit/tidalupsurge
+https://github.com/retrogradeorbit/thekeep
+https://github.com/retrogradeorbit/tile-map
+https://github.com/retrogradeorbit/cloud-fighter
+https://github.com/retrogradeorbit/biscuit-switch
 https://github.com/retrogradeorbit/moonhenge
 
-For other, older examples, look at:
+For other, even older examples, look at:
 
 https://github.com/retrogradeorbit/ld34
 https://github.com/retrogradeorbit/splash
