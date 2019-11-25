@@ -6,6 +6,10 @@ A 2D ClojureScript Game Engine. For building webgames. It's not really an engine
 
 # Complete Example Games
 
+https://github.com/retrogradeorbit/otoch (entry for Global Game Jam 2019)
+
+https://github.com/retrogradeorbit/cloud-fighter (entry for LISP Game Jam August 2016)
+
 https://github.com/retrogradeorbit/moonhenge (entry for Global Game Jam 2016)
 
 https://github.com/retrogradeorbit/biscuit-switch (entry for Ludum Dare 35)
@@ -234,16 +238,23 @@ https://github.com/retrogradeorbit/otoch
 older games:
 
 https://github.com/retrogradeorbit/tidalupsurge
+
 https://github.com/retrogradeorbit/thekeep
+
 https://github.com/retrogradeorbit/tile-map
+
 https://github.com/retrogradeorbit/cloud-fighter
+
 https://github.com/retrogradeorbit/biscuit-switch
+
 https://github.com/retrogradeorbit/moonhenge
 
 For other, even older examples, look at:
 
 https://github.com/retrogradeorbit/ld34
+
 https://github.com/retrogradeorbit/splash
+
 https://github.com/retrogradeorbit/ludumdare33
 
 Older examples using older versions of the library may not run, but will give you hints as to how it works.
